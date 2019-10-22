@@ -36,6 +36,35 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'com.github.stephanenicolas.toothpick:ktp:3.1.0'
-    kapt 'com.github.stephanenicolas.toothpick:toothpick-compiler:3.1.0'
+
+    implementation 'com.jakewharton:butterknife:10.2.0'
+    kapt 'com.jakewharton:butterknife-compiler:10.2.0'
+
+    def autodispose_version = "1.4.0"
+    def rxbinding_version = "3.0.0"
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.13'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
+    implementation "com.uber.autodispose:autodispose:$autodispose_version"
+    implementation "com.uber.autodispose:autodispose-lifecycle:$autodispose_version"
+    implementation "com.uber.autodispose:autodispose-android:$autodispose_version"
+    implementation "com.uber.autodispose:autodispose-android-archcomponents:$autodispose_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding:$rxbinding_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-core:$rxbinding_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-appcompat:$rxbinding_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-drawerlayout:$rxbinding_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-recyclerview:$rxbinding_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-slidingpanelayout:$rxbinding_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-swiperefreshlayout:$rxbinding_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-viewpager:$rxbinding_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-material:$rxbinding_version"
+    implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.1'
+    implementation 'com.github.ultimate-deej:rx-action:develop-SNAPSHOT'
+
+    def toothpick_version = "3.1.0"
+    implementation "com.github.stephanenicolas.toothpick:ktp:$toothpick_version"
+    implementation "com.github.stephanenicolas.toothpick:smoothie-androidx:$toothpick_version"
+    kapt "com.github.stephanenicolas.toothpick:toothpick-compiler:$toothpick_version"
+
+    implementation 'ru.terrakok.cicerone:cicerone:5.0.0'
 }
