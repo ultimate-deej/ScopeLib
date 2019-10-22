@@ -1,4 +1,4 @@
-package deej.scopelib
+package deej.scopelib.core.toothpick.scope
 
 import toothpick.config.Module
 

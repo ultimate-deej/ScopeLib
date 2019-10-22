@@ -1,7 +1,8 @@
-package deej.scopelib
+package deej.scopelib.core.platform
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import deej.scopelib.R
 
 class MainActivity : AppCompatActivity() {
 

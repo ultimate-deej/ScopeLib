@@ -1,4 +1,4 @@
-package deej.scopelib
+package deej.scopelib.core.toothpick.scope
 
 import android.os.Parcelable
 import toothpick.config.Module

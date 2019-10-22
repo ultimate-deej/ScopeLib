@@ -1,5 +1,6 @@
 package deej.scopelib
 
+import deej.scopelib.core.toothpick.scope.ScopeArguments
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
 import org.junit.Test
