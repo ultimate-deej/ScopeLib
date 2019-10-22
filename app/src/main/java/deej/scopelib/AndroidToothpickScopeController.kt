@@ -31,3 +31,9 @@ class AndroidToothpickScopeController(private val parentScope: Scope) : ScopeCon
 
 @Parcelize
 data class TestArgs(override val name: @RawValue Any) : AndroidToothpickScopeArguments
+
+// Test scenarios. Do it step-by-step Max, don't try to solve all at once.
+// 1. Root
+// 2. Push without branching
+// 3. Tabs w/o any pushing within tabs (leaf screen in each tab aka branching v1)
+// 4. Tabs w/ pushing (container in each tab aka branching v2)
