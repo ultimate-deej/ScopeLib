@@ -4,22 +4,19 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import butterknife.BindView
 import butterknife.OnClick
 import deej.scopelib.BaseFragment
-import deej.scopelib.FragmentArgumentsDelegates
 import deej.scopelib.R
 import deej.scopelib.core.toothpick.qualifiers.Param
-import deej.scopelib.core.toothpick.scope.AndroidToothpickScopeArguments
+import deej.scopelib.core.toothpick.scope.OpensScopeFragment
+import deej.scopelib.core.toothpick.scope.ScopeArguments
 import deej.scopelib.presentation.navigation.coordinators.RootCoordinator
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.parcel.RawValue
 import toothpick.config.Module
-import java.util.*
 import javax.inject.Inject
 
-class HomeFragment : BaseFragment(R.layout.fragment_home) {
+class HomeFragment : BaseFragment(R.layout.fragment_home), OpensScopeFragment {
     @BindView(R.id.label) lateinit var label: TextView
     @BindView(R.id.input) lateinit var field: EditText
 
@@ -41,10 +38,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
 @Parcelize
 data class HomeScopeArguments(
-    val param: String,
-    override val name: @RawValue Any = "Home scope",
-    override val instanceId: String = UUID.randomUUID().toString()
-) : AndroidToothpickScopeArguments {
+    val param: String
+) : ScopeArguments() {
 
     override fun createModules(): Array<Module> = arrayOf(
         ParamModule(param)
