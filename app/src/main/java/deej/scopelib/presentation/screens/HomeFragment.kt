@@ -6,11 +6,11 @@ import android.widget.EditText
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.OnClick
-import deej.scopelib.BaseFragment
 import deej.scopelib.R
 import deej.scopelib.core.toothpick.qualifiers.Param
 import deej.scopelib.core.toothpick.scope.OpensScopeFragment
 import deej.scopelib.core.toothpick.scope.ScopeArguments
+import deej.scopelib.presentation.base.BaseFragment
 import deej.scopelib.presentation.navigation.coordinators.RootCoordinator
 import kotlinx.android.parcel.Parcelize
 import toothpick.config.Module

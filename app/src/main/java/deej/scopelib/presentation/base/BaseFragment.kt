@@ -1,4 +1,4 @@
-package deej.scopelib
+package deej.scopelib.presentation.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
