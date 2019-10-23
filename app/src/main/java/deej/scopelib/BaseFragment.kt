@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import butterknife.ButterKnife
+import deej.scopelib.core.toothpick.scope.AndroidToothpickScopeArguments
 
 abstract class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentLayoutId) {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -14,4 +15,6 @@ abstract class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentL
             ButterKnife.bind(this, it)
         }
     }
+
+    var scopeArguments: AndroidToothpickScopeArguments? by FragmentArgumentsDelegates.parcelable()
 }

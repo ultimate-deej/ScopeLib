@@ -31,8 +31,8 @@ import toothpick.Toothpick
 //}
 
 
-@Parcelize
-data class TestArgs(override val name: @RawValue Any) : AndroidToothpickScopeArguments
+//@Parcelize
+//data class TestArgs(override val name: @RawValue Any) : AndroidToothpickScopeArguments
 
 // Test scenarios. Do it step-by-step Max, don't try to solve all at once.
 // 1. Root

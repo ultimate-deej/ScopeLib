@@ -34,14 +34,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     fun restart() {
         val newParam = field.text.toString()
         if (newParam.isBlank()) return
-        println("RESTARTING with $newParam")
+        println("QWE RESTARTING with $newParam")
         coordinator.start(newParam)
-    }
-
-    companion object {
-        operator fun invoke(param: String) = HomeFragment().apply {
-            this.externalScopeArguments = HomeScopeArguments(param)
-        }
     }
 }
 
@@ -49,8 +43,9 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
 data class HomeScopeArguments(
     val param: String,
     override val name: @RawValue Any = "Home scope",
-    val creatorId: String = UUID.randomUUID().toString()
+    override val instanceId: String = UUID.randomUUID().toString()
 ) : AndroidToothpickScopeArguments {
+
     override fun createModules(): Array<Module> = arrayOf(
         ParamModule(param)
     )
@@ -61,5 +56,3 @@ class ParamModule(param: String) : Module() {
         bind(String::class.java).withName(Param::class.java).toInstance(param)
     }
 }
-
-var Fragment.externalScopeArguments: AndroidToothpickScopeArguments? by FragmentArgumentsDelegates.parcelable()
