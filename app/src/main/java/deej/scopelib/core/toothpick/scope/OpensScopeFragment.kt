@@ -20,6 +20,6 @@ interface OpensScopeFragment : OpensScope {
 }
 
 private fun Any.throwNotFragmentException(): Nothing =
-    throw ClassCastException("OpensScopeFragment is for use with ${Fragment::class.java.name} only but applied to ${this.javaClass.name}.")
+    throw ClassCastException("OpensScopeFragment is intended to be used only with ${Fragment::class.java.name} but applied to ${this.javaClass.name}.")
 
 private const val ARGUMENT_SCOPE_OPTIONS = "(Fragment: OpensScope).scopeOptions"
