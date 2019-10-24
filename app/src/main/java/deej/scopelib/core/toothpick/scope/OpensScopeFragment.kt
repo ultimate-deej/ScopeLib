@@ -1,5 +1,6 @@
 package deej.scopelib.core.toothpick.scope
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 
@@ -17,6 +18,10 @@ interface OpensScopeFragment : OpensScope {
             }
             requireArguments().putParcelable(ARGUMENT_SCOPE_OPTIONS, value)
         }
+
+    fun Activity.asd(){
+
+    }
 }
 
 private fun Any.throwNotFragmentException(): Nothing =

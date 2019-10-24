@@ -5,4 +5,4 @@ import kotlin.annotation.AnnotationTarget.*
 
 @Qualifier
 @Target(FIELD, VALUE_PARAMETER, PROPERTY_SETTER)
-annotation class AppNavigation
+annotation class ActivityNavigation

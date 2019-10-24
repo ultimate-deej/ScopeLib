@@ -9,7 +9,7 @@ object Screens {
     class Home(private val param: String) : SupportAppScreen() {
         override fun getFragment() = HomeFragment().apply {
             val scopeArguments = HomeScopeArguments(this@Home.param)
-            scopeOptions = ScopeOptions("Home scope", scopeArguments)
+            scopeOptions = ScopeOptions("Home scope", scopeArguments, true)
         }
     }
 }

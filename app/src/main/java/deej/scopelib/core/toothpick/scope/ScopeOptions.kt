@@ -9,5 +9,10 @@ import java.util.*
 data class ScopeOptions(
     val name: @RawValue Any,
     val scopeArguments: ScopeArguments,
-    val instanceId: String = UUID.randomUUID().toString()
-) : Parcelable
+    val extends: Boolean = false,
+    val instanceId: String = UUID.randomUUID().toString(),
+    var parent: ScopeOptions? = null
+) : Parcelable {
+    val root: ScopeOptions
+        get() = parent?.root ?: this
+}

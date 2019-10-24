@@ -3,14 +3,18 @@ package deej.scopelib.core.platform
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import deej.scopelib.R
-import deej.scopelib.core.toothpick.scope.InjectorFragmentLifecycleCallbacks
+import deej.scopelib.core.toothpick.modules.NavigationModule
+import deej.scopelib.core.toothpick.qualifiers.ActivityNavigation
+import deej.scopelib.core.toothpick.scope.*
 import deej.scopelib.presentation.navigation.coordinators.RootCoordinator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
+import toothpick.Scope
 import toothpick.Toothpick
+import toothpick.smoothie.module.SmoothieApplicationModule
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
+class MainActivity : AppCompatActivity(R.layout.activity_main), OpensScope {
     @Inject lateinit var coordinator: RootCoordinator
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
@@ -24,10 +28,16 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
+    // Next do list, then tabs
     override fun onCreate(savedInstanceState: Bundle?) {
-        val scope = Toothpick.openScopes(App::class.java)
-        scope.inject(this)
-        supportFragmentManager.registerFragmentLifecycleCallbacks(InjectorFragmentLifecycleCallbacks(scope), false)
+        if (savedInstanceState == null) {
+            scopeOptions = getColdStartScopeOptions()
+        } else {
+            restoreScopeOptions(savedInstanceState)
+        }
+        initScope().inject(this)
+        println("QWE ACTIVITY ON CREATED SCOPE ${scopeOptions.name}")
+        supportFragmentManager.registerFragmentLifecycleCallbacks(InjectorFragmentLifecycleCallbacks(scopeOptions, ::scopeOptions::set), false)
 
         super.onCreate(savedInstanceState)
 
@@ -48,4 +58,34 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         navigatorHolder.removeNavigator()
     }
 
+    // Activity has no parent to initialize a scope for it. So it has to do it itself.
+    private fun initScope(): Scope {
+        val scopeOptions = this.scopeOptions.root
+
+        if (Toothpick.isScopeOpen(scopeOptions.name)) {
+            return Toothpick.openScope(scopeOptions.name)
+        }
+
+        return Toothpick.openScope(scopeOptions.name)
+            .installModules(
+                ScopeOptionsModule(scopeOptions),
+                SmoothieApplicationModule(application),
+                NavigationModule<ActivityNavigation>(isDefault = true)
+            )
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putParcelable(ScopeOptions::class.java.name, scopeOptions)
+    }
+
+    private fun restoreScopeOptions(savedInstanceState: Bundle) {
+        scopeOptions = savedInstanceState.getParcelable(ScopeOptions::class.java.name)!!
+    }
+
+    private fun getColdStartScopeOptions() =
+        ScopeOptions(MainActivity::class.java.name, ScopeArguments.Empty, instanceId = "Singleton root scope")
+
+    override lateinit var scopeOptions: ScopeOptions
 }
