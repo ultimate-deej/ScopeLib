@@ -28,7 +28,19 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), OpensScope {
         }
     }
 
-    // Next do list, then tabs
+    // Next create another app. Prolly use Cicerone, Toothpick, Butter Knife
+    //  - Screens to make (don't worry about scopes at first):
+    //    - Root screen with a button
+    //    - Next push some tabs; extends the scope
+    //    - First tab is just a dumb blank screen
+    //    - Second tab is a simple tab that subscopes further
+    //    - Third tab is a container which also subscopes
+    //      - List
+    //      - Details (with another subscope)
+    //  - Only then add scope-related code. Logs can be keeped.
+    //  - Then add arguments so that scopes are actually do something
+    //
+    // And only when you shape the idea enough to make it work, extract the code into a library and write tests.
     override fun onCreate(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             scopeOptions = getColdStartScopeOptions()
