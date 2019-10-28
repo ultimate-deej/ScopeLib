@@ -1,7 +1,7 @@
 package deej.thoroughtestapp.presentation.screens
 
-import androidx.fragment.app.Fragment
 import deej.thoroughtestapp.R
+import deej.thoroughtestapp.presentation.base.BaseFragment
 
-class SimpleTabFragment : Fragment(R.layout.fragment_simple_tab) {
+class SimpleTabFragment : BaseFragment(R.layout.fragment_simple_tab) {
 }

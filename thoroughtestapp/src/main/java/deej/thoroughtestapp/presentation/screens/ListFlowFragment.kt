@@ -1,7 +1,7 @@
 package deej.thoroughtestapp.presentation.screens
 
-import androidx.fragment.app.Fragment
 import deej.thoroughtestapp.R
+import deej.thoroughtestapp.presentation.base.BaseFragment
 
-class ListFlowFragment : Fragment(R.layout.flow_list) {
+class ListFlowFragment : BaseFragment(R.layout.flow_list) {
 }
