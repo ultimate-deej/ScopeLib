@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/simple"
+        android:title="Simple" />
+    <item
+        android:id="@+id/scoped"
+        android:title="Scoped" />
+    <item
+        android:id="@+id/list"
+        android:title="Scoped List" />
+</menu>
