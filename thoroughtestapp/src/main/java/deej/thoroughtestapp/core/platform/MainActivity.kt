@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), OpensScope {
         }
         initScope().inject(this)
         println("QWE ACTIVITY ON CREATED SCOPE ${scopeOptions.name}")
-        supportFragmentManager.registerFragmentLifecycleCallbacks(InjectorFragmentLifecycleCallbacks(scopeOptions, ::scopeOptions::set), false)
+        supportFragmentManager.registerFragmentLifecycleCallbacks(InjectorFragmentLifecycleCallbacks(::scopeOptions), false)
 
         super.onCreate(savedInstanceState)
 

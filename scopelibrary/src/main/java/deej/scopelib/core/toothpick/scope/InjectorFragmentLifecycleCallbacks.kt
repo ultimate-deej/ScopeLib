@@ -6,17 +6,15 @@ import androidx.fragment.app.FragmentManager
 import toothpick.Scope
 import toothpick.Toothpick
 import javax.inject.Inject
+import kotlin.reflect.KMutableProperty0
 
 class InjectorFragmentLifecycleCallbacks @Inject constructor(
-    currentScopeOptions: ScopeOptions,
-    private val onChangeListener: (ScopeOptions) -> Unit
+    private val currentScopeOptionsReference: KMutableProperty0<ScopeOptions>
 ) : FragmentManager.FragmentLifecycleCallbacks() {
 
-    private var currentScopeOptions: ScopeOptions = currentScopeOptions
-        set(value) {
-            field = value
-            onChangeListener(value)
-        }
+    private var currentScopeOptions: ScopeOptions
+        get() = currentScopeOptionsReference.get()
+        set(value) = currentScopeOptionsReference.set(value)
 
     init {
         restoreIfNeeded(currentScopeOptions)
