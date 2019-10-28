@@ -42,12 +42,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), OpensScope {
     //
     // And only when you shape the idea enough to make it work, extract the code into a library and write tests.
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (savedInstanceState == null) {
-            scopeOptions = getColdStartScopeOptions()
-        } else {
-            restoreScopeOptions(savedInstanceState)
-        }
-        initScope().inject(this)
+        initScope(savedInstanceState).inject(this)
         println("QWE ACTIVITY ON CREATED SCOPE ${scopeOptions.name}")
         supportFragmentManager.registerFragmentLifecycleCallbacks(InjectorFragmentLifecycleCallbacks(::scopeOptions), false)
 
@@ -71,7 +66,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), OpensScope {
     }
 
     // Activity has no parent to initialize a scope for it. So it has to do it itself.
-    private fun initScope(): Scope {
+    private fun initScope(savedInstanceState: Bundle?): Scope {
+        if (savedInstanceState == null) {
+            scopeOptions = getColdStartScopeOptions()
+        } else {
+            restoreScopeOptions(savedInstanceState)
+        }
+
         val scopeOptions = this.scopeOptions.root
 
         if (Toothpick.isScopeOpen(scopeOptions.name)) {
