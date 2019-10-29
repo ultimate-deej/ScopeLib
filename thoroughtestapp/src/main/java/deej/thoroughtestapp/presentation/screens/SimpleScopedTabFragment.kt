@@ -15,7 +15,6 @@ import javax.inject.Inject
 
 class SimpleScopedTabFragment : BaseFragment(R.layout.fragment_simple_scoped_tab), OpensScopeFragment {
     @BindView(R.id.content) lateinit var label: TextView
-    @BindView(R.id.button) lateinit var button: Button
 
     @Inject @SimpleScopedTabParam lateinit var valueFromScope: String
     @Inject lateinit var coordinator: RootCoordinator

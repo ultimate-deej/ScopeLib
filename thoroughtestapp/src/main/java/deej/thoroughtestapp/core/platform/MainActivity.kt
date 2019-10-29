@@ -2,6 +2,8 @@ package deej.thoroughtestapp.core.platform
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import deej.scopelib.core.toothpick.scope.*
 import deej.thoroughtestapp.R
 import deej.thoroughtestapp.core.toothpick.modules.NavigationModule
@@ -9,6 +11,7 @@ import deej.thoroughtestapp.core.toothpick.qualifiers.ActivityNavigation
 import deej.thoroughtestapp.presentation.navigation.coordinators.RootCoordinator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
+import ru.terrakok.cicerone.commands.Command
 import toothpick.Scope
 import toothpick.Toothpick
 import toothpick.smoothie.module.SmoothieApplicationModule
@@ -19,6 +22,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), OpensScope {
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
     private val navigator = object : SupportAppNavigator(this, supportFragmentManager, R.id.content) {
+        override fun setupFragmentTransaction(command: Command, currentFragment: Fragment?, nextFragment: Fragment, fragmentTransaction: FragmentTransaction) {
+            println("QWE nextFragment ${nextFragment.javaClass.simpleName}")
+            fragmentTransaction.setReorderingAllowed(true)
+        }
+
         override fun activityBack() {
             // We're here which means it's nowhere to go back to. In this case minimize.
             if (!moveTaskToBack(false)) {
@@ -30,8 +38,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), OpensScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         initScope(savedInstanceState).inject(this)
-        println("QWE ACTIVITY ON CREATED SCOPE ${scopeOptions.name}")
-        supportFragmentManager.registerFragmentLifecycleCallbacks(InjectorFragmentLifecycleCallbacks(::scopeOptions), false)
+        println("QWE ACTIVITY ON CREATED SCOPE ${scopeOptions.instanceId} (${scopeOptions.name})")
+        supportFragmentManager.registerFragmentLifecycleCallbacks(InjectorFragmentLifecycleCallbacks(scopeOptions, true), false)
 
         super.onCreate(savedInstanceState)
 
@@ -59,8 +67,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), OpensScope {
         } else {
             restoreScopeOptions(savedInstanceState)
         }
-
-        val scopeOptions = this.scopeOptions.root
 
         if (Toothpick.isScopeOpen(scopeOptions.name)) {
             return Toothpick.openScope(scopeOptions.name)

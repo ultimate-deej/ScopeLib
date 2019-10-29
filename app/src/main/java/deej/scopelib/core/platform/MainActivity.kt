@@ -73,8 +73,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), OpensScope {
             restoreScopeOptions(savedInstanceState)
         }
 
-        val scopeOptions = this.scopeOptions.root
-
         if (Toothpick.isScopeOpen(scopeOptions.name)) {
             return Toothpick.openScope(scopeOptions.name)
         }
