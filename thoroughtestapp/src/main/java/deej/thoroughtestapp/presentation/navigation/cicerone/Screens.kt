@@ -1,5 +1,7 @@
 package deej.thoroughtestapp.presentation.navigation.cicerone
 
+import deej.scopelib.core.toothpick.scope.ScopeOptions
+import deej.thoroughtestapp.presentation.scopearguments.SimpleTabScopeArguments
 import deej.thoroughtestapp.presentation.screens.*
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
@@ -13,7 +15,9 @@ object Screens {
     }
 
     object SimpleScopedTab : SupportAppScreen() {
-        override fun getFragment() = SimpleScopedTabFragment()
+        override fun getFragment() = SimpleScopedTabFragment().apply {
+            scopeOptions = ScopeOptions("Simple tab scope", SimpleTabScopeArguments)
+        }
     }
 
     object ItemList : SupportAppScreen() {

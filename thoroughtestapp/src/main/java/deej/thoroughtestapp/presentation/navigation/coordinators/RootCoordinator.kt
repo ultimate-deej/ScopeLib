@@ -13,4 +13,6 @@ class RootCoordinator(
     fun home() = router.newRootScreen(Screens.Home)
 
     fun tabs() = router.navigateTo(Flows.Tabs)
+
+    fun replacementChain() = router.newRootChain(Screens.Home, Screens.SimpleScopedTab)
 }

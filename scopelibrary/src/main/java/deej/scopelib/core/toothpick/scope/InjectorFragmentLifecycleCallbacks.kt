@@ -29,7 +29,7 @@ class InjectorFragmentLifecycleCallbacks @Inject constructor(
         if (Toothpick.isScopeOpen(scopeOptions.name)) return
 
         restoreIfNeeded(parent)
-        initializeScope(scopeOptions)
+        initializeScope(parent.name, scopeOptions)
         println("QWE SCOPE RESTORED (${scopeOptions.name})")
     }
 
@@ -54,15 +54,16 @@ class InjectorFragmentLifecycleCallbacks @Inject constructor(
     private fun reopenCurrentScope(scopeOptionsInFragment: ScopeOptions): Scope {
         return if (currentScopeOptions.instanceId == scopeOptionsInFragment.instanceId) {
             // Android simply recreated the fragment, the existing scope is valid.
-            println("QWE SCOPE ALREADY OPEN, VALID, SKIPPING")
+            println("QWE SCOPE (${scopeOptionsInFragment.name}) ALREADY OPEN, VALID, SKIPPING")
             Toothpick.openScope(scopeOptionsInFragment.name)
         } else {
             // instanceId is different which means the fragment was recreated by the programmer. We can't be sure if we can reuse the existing scope, so just recreate it.
-            println("QWE SCOPE ALREADY OPEN, INVALID, CLOSING ${currentScopeOptions.instanceId}")
+            println("QWE SCOPE (${scopeOptionsInFragment.name}) ALREADY OPEN, INVALID, CLOSING ${currentScopeOptions.instanceId}")
             closeCurrentScope()
+            val parentName = currentScopeOptions.name
             scopeOptionsInFragment.parent = currentScopeOptions
             currentScopeOptions = scopeOptionsInFragment
-            initializeScope(scopeOptionsInFragment)
+            initializeScope(parentName, scopeOptionsInFragment)
         }
     }
 
@@ -72,21 +73,22 @@ class InjectorFragmentLifecycleCallbacks @Inject constructor(
             "${scopeOptionsInFragment.name} is already open."
         }
 
+        val parentName = currentScopeOptions.name
         if (scopeOptionsInFragment.extends) {
             scopeOptionsInFragment.parent = currentScopeOptions
             currentScopeOptions = scopeOptionsInFragment
-            println("QWE REQUESTED SCOPE IS NEW, EXTENDING")
+            println("QWE REQUESTED SCOPE (${scopeOptionsInFragment.name}) IS NEW, EXTENDING")
         } else {
-            println("QWE REQUESTED SCOPE IS NEW, NOT EXTENDING")
+            println("QWE REQUESTED SCOPE (${scopeOptionsInFragment.name}) IS NEW, NOT EXTENDING")
         }
         // If extends == false then assume that the new scope is managed by the new fragment.
         // But keep using the old one here.
 
-        return initializeScope(scopeOptionsInFragment)
+        return initializeScope(parentName, scopeOptionsInFragment)
     }
 
-    private fun initializeScope(scopeOptions: ScopeOptions): Scope {
-        return Toothpick.openScopes(scopeOptions.parent!!.name, scopeOptions.name)
+    private fun initializeScope(parentName: Any, scopeOptions: ScopeOptions): Scope {
+        return Toothpick.openScopes(parentName, scopeOptions.name)
             .installModules(*scopeOptions.scopeArguments.createModules(), ScopeOptionsModule(scopeOptions))
             .also {
                 println("QWE SCOPE NEWLY OPENED ${scopeOptions.instanceId} (${scopeOptions.name})")
@@ -109,10 +111,10 @@ class InjectorFragmentLifecycleCallbacks @Inject constructor(
         if (!f.isStateSaved) {
             println("QWE DESTROY REQUESTED FOR ${scopeOptionsInFragment.instanceId}")
             if (currentScopeOptions.instanceId == scopeOptionsInFragment.instanceId) {
+                println("QWE LIVE ${currentScopeOptions.instanceId} (${currentScopeOptions.name}), CLOSING")
                 closeCurrentScope()
-                println("QWE LIVE ${currentScopeOptions.instanceId}, CLOSING")
             } else {
-                println("QWE LIVE ${currentScopeOptions.instanceId}, KEEPING")
+                println("QWE LIVE ${currentScopeOptions.instanceId} (${currentScopeOptions.name}), KEEPING")
             }
         }
     }

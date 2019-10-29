@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commitNow
 import butterknife.BindView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import deej.scopelib.core.toothpick.scope.InjectorFragmentLifecycleCallbacks
 import deej.scopelib.core.toothpick.scope.OpensScopeFragment
 import deej.thoroughtestapp.R
 import deej.thoroughtestapp.core.toothpick.qualifiers.TabsParam
@@ -22,6 +23,12 @@ class TabsFlowFragment : BaseFragment(R.layout.flow_tabs), OpensScopeFragment, B
     @BindView(R.id.bottomNavigation) lateinit var bottomNavigationView: BottomNavigationView
 
     @Inject @TabsParam lateinit var paramFromScope: String
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        childFragmentManager.registerFragmentLifecycleCallbacks(InjectorFragmentLifecycleCallbacks(::scopeOptions), false)
+
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         titleLabel.text = paramFromScope
