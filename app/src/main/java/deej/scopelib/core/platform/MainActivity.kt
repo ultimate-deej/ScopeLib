@@ -41,6 +41,19 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), OpensScope {
     //  - Then add arguments so that scopes are actually do something
     //
     // And only when you shape the idea enough to make it work, extract the code into a library and write tests.
+
+    // New issue. What if the following scope chain is open (just an example): Root-SignedIn-ReportsByStatus.
+    // I ask Cicerone to replace the screens with screens that have the following associated scopes: Root-SignedIn-SingleReport
+    // It will try to open the new chain before the old chain has been closed. Will I really need to always specify parent scope?
+    // Or should I embed this knowledge into ScopeOptions? I'd rather not. Meh.
+    // It wasn't a problem during the previous attempts bc the parent scope could never change previously. Now it can (in the made up example above).
+    // Ok I'll just check whether it's true for now. This is why I write a sample app.
+
+    // After all that proceed to OpensScope<T: ScopeArguments>
+
+    // Also, think of a better name for callbacks, InjectorFragmentLifecycleCallbacks looks cumbersome. On the other hand, even the
+    // method's name is as bulky as registerFragmentLifecycleCallbacks.
+    // Well at least I can reflect all the changes in the name, even if it stays long.
     override fun onCreate(savedInstanceState: Bundle?) {
         initScope(savedInstanceState).inject(this)
         println("QWE ACTIVITY ON CREATED SCOPE ${scopeOptions.name}")
