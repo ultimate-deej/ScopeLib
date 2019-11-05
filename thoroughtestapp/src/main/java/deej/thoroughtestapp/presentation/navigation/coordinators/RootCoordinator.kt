@@ -20,5 +20,7 @@ class RootCoordinator(
 
     fun tabsViaNewChain() = router.newRootChain(Screens.Home, Screens.ScopedHome, Flows.Tabs)
 
-    fun replacementChain() = router.newRootChain(Screens.Home, Screens.SimpleScopedTab)
+    // TODO: prepare scope options chain before navigating
+    //  or, move the logic out of callbacks and only call close there (in onDestroy), and do open routines in navigator callback
+    fun replacementChain() = router.newRootChain(Screens.Home, Screens.ScopedHome, Screens.SimpleScopedTab)
 }

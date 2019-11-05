@@ -8,82 +8,86 @@ import java.util.*
 
 class ScopeOptionsUnitTest {
     @Test
-    fun head() {
-        val root = ScopeOptions("Root", ScopeArguments.Empty)
-        assertSame(root, root.head)
+    fun tail() {
+        val root = ScopeOptions("Root", ScopeArguments.Empty, null)
+        assertSame(root, root.tail)
 
-        val firstExtension = ScopeOptions("Scope 1", ScopeArguments.Empty)
-        root.extension = firstExtension
-        assertSame(firstExtension, root.head)
+        val firstDescendant = ScopeOptions("Scope 1", ScopeArguments.Empty, null)
+        root.child = firstDescendant
+        assertSame(firstDescendant, root.tail)
 
-        val secondExtension = ScopeOptions("Scope 2", ScopeArguments.Empty)
-        firstExtension.extension = secondExtension
-        assertSame(secondExtension, root.head)
+        val secondDescendant = ScopeOptions("Scope 2", ScopeArguments.Empty, null)
+        firstDescendant.child = secondDescendant
+        assertSame(secondDescendant, root.tail)
     }
 
     @Test
-    fun extend() {
-        val (root, firstExtension, secondExtension) = createSampleScopeOptions()
+    fun appendDescendant() {
+        val root = ScopeOptions("Root", ScopeArguments.Empty, null)
+        val firstDescendant = ScopeOptions("Scope 1", ScopeArguments.Empty, "Root", storeInParent = true)
+        val secondDescendant = ScopeOptions("Scope 2", ScopeArguments.Empty, "Scope 1", storeInParent = true)
+        root.appendDescendant(firstDescendant)
+        root.appendDescendant(secondDescendant)
 
-        assertSame(firstExtension, root.extension)
-        assertSame(secondExtension, root.extension?.extension)
+        assertSame(firstDescendant, root.child)
+        assertSame(secondDescendant, root.child?.child)
     }
 
     @Test
-    fun removeExtensionSelf() {
-        val (root, _, secondExtension) = createSampleScopeOptions()
+    fun removeDescendantSelf() {
+        val (root, _, secondDescendant) = createSampleScopeOptions()
 
-        root.removeExtension(root.name, null)
-        assertSame(secondExtension, root.head)
+        root.removeDescendant(root.name, null)
+        assertSame(secondDescendant, root.tail)
     }
 
     @Test
-    fun removeFirstExtension() {
-        val (root, firstExtension, _) = createSampleScopeOptions()
+    fun removeFirstDescendant() {
+        val (root, firstDescendant, _) = createSampleScopeOptions()
 
-        root.removeExtension(firstExtension.name, null)
-        assertSame(root, root.head)
+        root.removeDescendant(firstDescendant.name, null)
+        assertSame(root, root.tail)
     }
 
     @Test
-    fun removeSecondExtension() {
-        val (root, firstExtension, secondExtension) = createSampleScopeOptions()
+    fun removeSecondDescendant() {
+        val (root, firstDescendant, secondDescendant) = createSampleScopeOptions()
 
-        root.removeExtension(secondExtension.name, null)
-        assertSame(firstExtension, root.head)
+        root.removeDescendant(secondDescendant.name, null)
+        assertSame(firstDescendant, root.tail)
     }
 
     @Test
-    fun removeUnrelatedExtension() {
-        val (root, _, secondExtension) = createSampleScopeOptions()
-        val unrelatedExtension = ScopeOptions("Unrelated Scope", ScopeArguments.Empty, extends = true)
+    fun removeUnrelatedDescendant() {
+        val (root, _, secondDescendant) = createSampleScopeOptions()
+        val unrelatedDescendant = ScopeOptions("Unrelated Scope", ScopeArguments.Empty, null, storeInParent = true)
 
-        root.removeExtension(unrelatedExtension.name, null)
-        assertSame(secondExtension, root.head)
+        root.removeDescendant(unrelatedDescendant.name, null)
+        assertSame(secondDescendant, root.tail)
     }
 
     @Test
-    fun removeExtensionWithSpecificId() {
-        val (root, firstExtension, secondExtension) = createSampleScopeOptions()
+    fun removeDescendantWithSpecificId() {
+        val (root, firstDescendant, secondDescendant) = createSampleScopeOptions()
 
-        root.removeExtension(secondExtension.name, secondExtension.instanceId)
-        assertSame(firstExtension, root.head)
+        root.removeDescendant(secondDescendant.name, secondDescendant.instanceId)
+        assertSame(firstDescendant, root.tail)
     }
 
     @Test
-    fun removeExtensionWithDifferentId() {
-        val (root, _, secondExtension) = createSampleScopeOptions()
+    fun removeDescendantWithDifferentId() {
+        val (root, _, secondDescendant) = createSampleScopeOptions()
 
-        root.removeExtension(secondExtension.name, UUID.randomUUID().toString())
-        assertSame(secondExtension, root.head)
+        root.removeDescendant(secondDescendant.name, UUID.randomUUID().toString())
+        assertSame(secondDescendant, root.tail)
     }
 
     private fun createSampleScopeOptions(): List<ScopeOptions> {
-        val root = ScopeOptions("Root", ScopeArguments.Empty)
-        val firstExtension = ScopeOptions("Scope 1", ScopeArguments.Empty, extends = true)
-        val secondExtension = ScopeOptions("Scope 2", ScopeArguments.Empty, extends = true)
-        root.extend(firstExtension)
-        root.extend(secondExtension)
-        return listOf(root, firstExtension, secondExtension)
+        val root = ScopeOptions("Root", ScopeArguments.Empty, null)
+        val firstDescendant = ScopeOptions("Scope 1", ScopeArguments.Empty, "Root", storeInParent = true)
+        val secondDescendant = ScopeOptions("Scope 2", ScopeArguments.Empty, "Scope 1", storeInParent = true)
+        root.appendDescendant(firstDescendant)
+        root.appendDescendant(secondDescendant)
+        return listOf(root, firstDescendant, secondDescendant)
     }
 }

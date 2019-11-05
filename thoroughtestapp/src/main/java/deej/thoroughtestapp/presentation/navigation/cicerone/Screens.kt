@@ -2,6 +2,7 @@ package deej.thoroughtestapp.presentation.navigation.cicerone
 
 import deej.scopelib.core.toothpick.scope.ScopeArguments
 import deej.scopelib.core.toothpick.scope.ScopeOptions
+import deej.thoroughtestapp.core.platform.MainActivity
 import deej.thoroughtestapp.presentation.scopearguments.SimpleTabScopeArguments
 import deej.thoroughtestapp.presentation.screens.*
 import ru.terrakok.cicerone.android.support.SupportAppScreen
@@ -13,7 +14,7 @@ object Screens {
 
     object ScopedHome : SupportAppScreen() {
         override fun getFragment() = ScopedHomeFragment().apply {
-            scopeOptions = ScopeOptions("Home scope", ScopeArguments.Empty, extends = true)
+            scopeOptions = ScopeOptions("Home scope", ScopeArguments.Empty, MainActivity::class.java.name, storeInParent = true)
         }
     }
 
@@ -23,7 +24,7 @@ object Screens {
 
     object SimpleScopedTab : SupportAppScreen() {
         override fun getFragment() = SimpleScopedTabFragment().apply {
-            scopeOptions = ScopeOptions("Simple tab scope", SimpleTabScopeArguments)
+            scopeOptions = ScopeOptions("Simple tab scope", SimpleTabScopeArguments, "Home scope")
         }
     }
 

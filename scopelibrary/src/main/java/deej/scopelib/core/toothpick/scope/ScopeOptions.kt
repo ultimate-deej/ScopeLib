@@ -1,5 +1,6 @@
 package deej.scopelib.core.toothpick.scope
 
+import android.os.Debug
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue
@@ -9,32 +10,42 @@ import java.util.*
 data class ScopeOptions(
     val name: @RawValue Any,
     val scopeArguments: ScopeArguments,
-    val extends: Boolean = false,
+    val parentName: @RawValue Any?,
+    val storeInParent: Boolean = false,
     val instanceId: String = UUID.randomUUID().toString(),
-    var extension: ScopeOptions? = null
+    var child: ScopeOptions? = null
 ) : Parcelable {
-    val head: ScopeOptions
-        get() = extension?.head ?: this
+    val tail: ScopeOptions
+        get() = child?.tail ?: this
 
-    fun extend(extension: ScopeOptions) {
-        check(extension.extends)
-        head.extension = extension
+    fun appendDescendant(descendant: ScopeOptions) {
+        check(descendant.storeInParent)
+        check(descendant != this) {
+            Debug.waitForDebugger()
+            "Cycle detected while trying to append $descendant"
+        }
+        val child = this.child
+        if (child != null) {
+            child.appendDescendant(descendant)
+        } else {
+            this.child = descendant
+        }
     }
 
-    fun removeExtension(name: Any, instanceId: String?) {
+    fun removeDescendant(name: Any, instanceId: String?) {
         var node: ScopeOptions? = this
         while (node != null) {
             // If instanceId is specified, it must match. If not, only check name.
-            val extension = node.extension
-            if (extension?.name == name) {
-                if (instanceId == null || extension.instanceId == instanceId) {
-                    check(extension.extends)
-                    node.extension = null
+            val descendant = node.child
+            if (descendant?.name == name) {
+                if (instanceId == null || descendant.instanceId == instanceId) {
+                    check(descendant.storeInParent)
+                    node.child = null
                 }
                 return
             }
 
-            node = extension
+            node = descendant
         }
     }
 }
