@@ -40,7 +40,6 @@ class InjectorFragmentLifecycleCallbacks(
         val scopeOptionsInFragment = f.scopeOptions
 
         if (isSameAsLive(scopeOptionsInFragment)) {
-            log("CLOSING SCOPE ${scopeOptionsInFragment.name}")
             Toothpick.closeScope(scopeOptionsInFragment.name)
             containerScopeOptions.removeStartingFrom(scopeOptionsInFragment.name, scopeOptionsInFragment.instanceId)
         }
@@ -74,12 +73,8 @@ class InjectorFragmentLifecycleCallbacks(
     private fun isSameAsLive(scopeOptions: ScopeOptions): Boolean {
         if (!Toothpick.isScopeOpen(scopeOptions.name)) return false
 
-        try {
-            val liveScopeOptions: ScopeOptions = Toothpick.openScope(scopeOptions.name).getInstance()
-            return scopeOptions.instanceId == liveScopeOptions.instanceId
-        } catch (e: Throwable) {
-            throw e
-        }
+        val liveScopeOptions: ScopeOptions = Toothpick.openScope(scopeOptions.name).getInstance()
+        return scopeOptions.instanceId == liveScopeOptions.instanceId
     }
 
     /**
@@ -88,9 +83,6 @@ class InjectorFragmentLifecycleCallbacks(
     private fun initializeScope(scopeOptions: ScopeOptions): Scope {
         return Toothpick.openScopes(scopeOptions.parentName, scopeOptions.name)
             .installModules(*scopeOptions.scopeArguments.createModules(), ScopeOptionsModule(scopeOptions))
-            .also {
-                log("OPENING SCOPE ${scopeOptions.parentName} -> ${scopeOptions.name} ${c++}")
-            }
     }
 
     override fun toString(): String {
@@ -102,11 +94,4 @@ class InjectorFragmentLifecycleCallbacks(
         }
         return "InjectorFragmentLifecycleCallbacks (scopes=[$scopeChainString])"
     }
-
-    private fun log(message: String) {
-        if (!log) return
-        println("QWE $message")
-    }
 }
-
-var c = 0
