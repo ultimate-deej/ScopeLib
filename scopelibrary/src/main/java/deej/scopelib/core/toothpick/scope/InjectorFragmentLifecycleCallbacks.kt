@@ -13,18 +13,24 @@ class InjectorFragmentLifecycleCallbacks(
 ) : FragmentManager.FragmentLifecycleCallbacks() {
 
     override fun onFragmentPreCreated(fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?) {
-        println("QWE CREATING F ${f.javaClass.simpleName}")
-        if (f !is OpensScope) {
-            Toothpick.openScope(containerScopeOptions.tail.name)
-                .inject(f)
-            return
+        if (f !is UsesScope) return
+
+        // We might have modified containerScopeOptions chain before adding the fragment `f`.
+        // Make sure all preconditions are satisfied.
+        ensureScopes(containerScopeOptions)
+
+        if (f is OpensScope) {
+            val fragmentScopeOptions = f.scopeOptions
+            if (fragmentScopeOptions.storeInPrevious) {
+                containerScopeOptions.appendTail(fragmentScopeOptions)
+            }
+            ensureScopes(fragmentScopeOptions)
         }
 
-        with(f.scopeOptions) {
-            ensureScopes(this)
-            Toothpick.openScope(name)
-                .inject(f)
-        }
+        check(Toothpick.isScopeOpen(f.usedScopeName))
+
+        Toothpick.openScope(f.usedScopeName)
+            .inject(f)
     }
 
     override fun onFragmentDestroyed(fm: FragmentManager, f: Fragment) {
@@ -32,84 +38,75 @@ class InjectorFragmentLifecycleCallbacks(
         if (f.isStateSaved) return
 
         val scopeOptionsInFragment = f.scopeOptions
-        println("QWE DESTROY REQUESTED FOR ${scopeOptionsInFragment.instanceId} (${scopeOptionsInFragment.name})")
 
-        if (isSameAsLive(scopeOptionsInFragment) == true) {
-            println("QWE CLOSING (${scopeOptionsInFragment.name})")
-
+        if (isSameAsLive(scopeOptionsInFragment)) {
+            log("CLOSING SCOPE ${scopeOptionsInFragment.name}")
             Toothpick.closeScope(scopeOptionsInFragment.name)
-            val oldTailName = containerScopeOptions.tail.name
-
-            containerScopeOptions.removeDescendant(scopeOptionsInFragment.name, scopeOptionsInFragment.instanceId)
-
-            if (oldTailName != containerScopeOptions.tail.name) {
-                println("QWE TAIL CUT DOWN FROM 3 ($oldTailName) TO ${containerScopeOptions.tail.name}")
-            }
-        } else {
-            println("QWE KEEPING (${scopeOptionsInFragment.name})")
+            containerScopeOptions.removeStartingFrom(scopeOptionsInFragment.name, scopeOptionsInFragment.instanceId)
         }
     }
 
+    /**
+     * Ensures that scope/scope chain described by [scopeOptions] is open and matches the requirements of [scopeOptions].
+     */
     private fun ensureScopes(scopeOptions: ScopeOptions) {
-        val sameAsLive = isSameAsLive(scopeOptions)
-        if (sameAsLive == false) {
-            val liveId = Toothpick.openScope(scopeOptions.name).getInstance<ScopeOptions>().instanceId
-            println("QWE SCOPE (${scopeOptions.name}) INVALID, CLOSING $liveId")
+        if (!isSameAsLive(scopeOptions)) {
             Toothpick.closeScope(scopeOptions.name)
-            val oldTailName = containerScopeOptions.tail.name
-            // BEFORE and AFTER - I'm just trying to understand what's wrong after process death
-            println("QWE CHILD BEFORE ${scopeOptions.child}")
-            containerScopeOptions.removeDescendant(scopeOptions.name, null)
-            println("QWE CHILD AFTER ${scopeOptions.child}")
-            if (oldTailName != containerScopeOptions.tail.name) {
-//                Debug.waitForDebugger()
-                println("QWE TAIL CUT DOWN FROM 1 ($oldTailName) TO (${containerScopeOptions.tail.name})")
-            }
-        }
-        if (sameAsLive == null) {
-            println("QWE SCOPE (${scopeOptions.name}) NOT OPEN")
-        }
-        if (sameAsLive == true) {
-            println("QWE SCOPE (${scopeOptions.name}) ALREADY OPEN, VALID, SKIPPING")
-        }
-        if (sameAsLive == null || sameAsLive == false) {
             initializeScope(scopeOptions)
-            if (scopeOptions != containerScopeOptions && scopeOptions.storeInParent) {
-                containerScopeOptions.appendDescendant(scopeOptions)
-            }
         }
 
-        scopeOptions.child?.let(::ensureScopes)
+        scopeOptions.next?.let(::ensureScopes)
     }
 
-    private fun isSameAsLive(scopeOptions: ScopeOptions): Boolean? {
-        if (!Toothpick.isScopeOpen(scopeOptions.name)) return null
+    /**
+     * Checks scope state.
+     *
+     * @param scopeOptions
+     *  Describes what we expect the open scope to be.
+     *
+     * @return
+     *  true if the scope is open and matches [scopeOptions].
+     *
+     *  false if the scope either:
+     *   1. isn't open at the moment
+     *   2. open but doesn't match [scopeOptions]. Needs to be reopened with new arguments.
+     */
+    private fun isSameAsLive(scopeOptions: ScopeOptions): Boolean {
+        if (!Toothpick.isScopeOpen(scopeOptions.name)) return false
 
-        val liveScopeOptions: ScopeOptions = Toothpick.openScope(scopeOptions.name).getInstance()
-        println("QWE IS SAME (${scopeOptions.name}) ${scopeOptions.instanceId} LIVE ${liveScopeOptions.instanceId}")
-        return scopeOptions.instanceId == liveScopeOptions.instanceId
+        try {
+            val liveScopeOptions: ScopeOptions = Toothpick.openScope(scopeOptions.name).getInstance()
+            return scopeOptions.instanceId == liveScopeOptions.instanceId
+        } catch (e: Throwable) {
+            throw e
+        }
     }
 
+    /**
+     * Opens a scope as described by [scopeOptions].
+     */
     private fun initializeScope(scopeOptions: ScopeOptions): Scope {
         return Toothpick.openScopes(scopeOptions.parentName, scopeOptions.name)
             .installModules(*scopeOptions.scopeArguments.createModules(), ScopeOptionsModule(scopeOptions))
             .also {
-                println("QWE SCOPE NEWLY OPENED ${scopeOptions.instanceId} (${scopeOptions.name}) parent ($scopeOptions.parentName)")
+                log("OPENING SCOPE ${scopeOptions.parentName} -> ${scopeOptions.name} ${c++}")
             }
     }
 
     override fun toString(): String {
         val scopeChainString = StringBuilder(containerScopeOptions.name.toString())
-        var descendant = containerScopeOptions.child
+        var descendant = containerScopeOptions.next
         while (descendant != null) {
-            scopeChainString.append(descendant.name, ", ")
-            descendant = descendant.child
+            scopeChainString.append(", ", descendant.name)
+            descendant = descendant.next
         }
         return "InjectorFragmentLifecycleCallbacks (scopes=[$scopeChainString])"
     }
 
-    private fun println(message: String) {
+    private fun log(message: String) {
         if (!log) return
-        kotlin.io.println(message)
+        println("QWE $message")
     }
 }
+
+var c = 0

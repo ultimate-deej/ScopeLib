@@ -1,51 +1,50 @@
 package deej.scopelib.core.toothpick.scope
 
-import android.os.Debug
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.parcel.RawValue
+import kotlinx.android.parcel.WriteWith
 import java.util.*
 
 @Parcelize
 data class ScopeOptions(
-    val name: @RawValue Any,
+    val name: @WriteWith<ScopeAnnotationParceler> Class<out Annotation>,
     val scopeArguments: ScopeArguments,
-    val parentName: @RawValue Any?,
-    val storeInParent: Boolean = false,
+    val parentName: @WriteWith<ScopeAnnotationParceler> Class<out Annotation>?,
+    val storeInPrevious: Boolean = false,
     val instanceId: String = UUID.randomUUID().toString(),
-    var child: ScopeOptions? = null
+    var next: ScopeOptions? = null
 ) : Parcelable {
     val tail: ScopeOptions
-        get() = child?.tail ?: this
+        get() = next?.tail ?: this
 
-    fun appendDescendant(descendant: ScopeOptions) {
-        check(descendant.storeInParent)
-        check(descendant != this) {
-            Debug.waitForDebugger()
-            "Cycle detected while trying to append $descendant"
+    fun appendTail(newTail: ScopeOptions) {
+        check(newTail.storeInPrevious)
+        if (newTail.name == name) {
+            check(newTail.instanceId == instanceId) { "Cycle detected while trying to append $newTail" }
+            return
         }
-        val child = this.child
-        if (child != null) {
-            child.appendDescendant(descendant)
+        val next = this.next
+        if (next != null) {
+            next.appendTail(newTail)
         } else {
-            this.child = descendant
+            this.next = newTail
         }
     }
 
-    fun removeDescendant(name: Any, instanceId: String?) {
+    fun removeStartingFrom(name: Any, instanceId: String?) {
         var node: ScopeOptions? = this
         while (node != null) {
             // If instanceId is specified, it must match. If not, only check name.
-            val descendant = node.child
-            if (descendant?.name == name) {
-                if (instanceId == null || descendant.instanceId == instanceId) {
-                    check(descendant.storeInParent)
-                    node.child = null
+            val next = node.next
+            if (next?.name == name) {
+                if (instanceId == null || next.instanceId == instanceId) {
+                    check(next.storeInPrevious)
+                    node.next = null
                 }
                 return
             }
 
-            node = descendant
+            node = next
         }
     }
 }
