@@ -21,7 +21,7 @@ class ScopeOptionsUnitTest {
     annotation class UnrelatedScope
 
     @Test
-    fun tail() {
+    fun `tail is last next in chain`() {
         val root = ScopeOptions(RootScope::class.java, ScopeArguments.Empty, null)
         assertSame(root, root.tail)
 
@@ -35,7 +35,7 @@ class ScopeOptionsUnitTest {
     }
 
     @Test
-    fun appendDescendant() {
+    fun `appendDescendant sets next of tail`() {
         val root = ScopeOptions(RootScope::class.java, ScopeArguments.Empty, null)
         val firstDescendant = ScopeOptions(Scope1::class.java, ScopeArguments.Empty, RootScope::class.java, storeInPrevious = true)
         val secondDescendant = ScopeOptions(Scope2::class.java, ScopeArguments.Empty, Scope1::class.java, storeInPrevious = true)
@@ -47,7 +47,7 @@ class ScopeOptionsUnitTest {
     }
 
     @Test
-    fun removeDescendantSelf() {
+    fun `removeStartingFrom(root) doesn't change the chain`() {
         val (root, _, secondDescendant) = createSampleScopeOptions()
 
         root.removeStartingFrom(root.name, null)
@@ -55,7 +55,7 @@ class ScopeOptionsUnitTest {
     }
 
     @Test
-    fun removeFirstDescendant() {
+    fun `removeStartingFrom(firstDescendant) leaves only root node`() {
         val (root, firstDescendant, _) = createSampleScopeOptions()
 
         root.removeStartingFrom(firstDescendant.name, null)
@@ -63,7 +63,7 @@ class ScopeOptionsUnitTest {
     }
 
     @Test
-    fun removeSecondDescendant() {
+    fun `removeStartingFrom(secondDescendant) leaves firstDescendant in the chain`() {
         val (root, firstDescendant, secondDescendant) = createSampleScopeOptions()
 
         root.removeStartingFrom(secondDescendant.name, null)
@@ -71,16 +71,16 @@ class ScopeOptionsUnitTest {
     }
 
     @Test
-    fun removeUnrelatedDescendant() {
+    fun `removeStartingFrom(nodeNotInChain) doesn't change the chain`() {
         val (root, _, secondDescendant) = createSampleScopeOptions()
-        val unrelatedDescendant = ScopeOptions(UnrelatedScope::class.java, ScopeArguments.Empty, null, storeInPrevious = true)
+        val nodeNotInChain = ScopeOptions(UnrelatedScope::class.java, ScopeArguments.Empty, null, storeInPrevious = true)
 
-        root.removeStartingFrom(unrelatedDescendant.name, null)
+        root.removeStartingFrom(nodeNotInChain.name, null)
         assertSame(secondDescendant, root.tail)
     }
 
     @Test
-    fun removeDescendantWithSpecificId() {
+    fun `removeStartingFrom with specific instanceId removes the node`() {
         val (root, firstDescendant, secondDescendant) = createSampleScopeOptions()
 
         root.removeStartingFrom(secondDescendant.name, secondDescendant.instanceId)
@@ -88,7 +88,7 @@ class ScopeOptionsUnitTest {
     }
 
     @Test
-    fun removeDescendantWithDifferentId() {
+    fun `removeStartingFrom with instanceId different from what is in the chain doesn't change the chain`() {
         val (root, _, secondDescendant) = createSampleScopeOptions()
 
         root.removeStartingFrom(secondDescendant.name, UUID.randomUUID().toString())
