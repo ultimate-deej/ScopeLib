@@ -37,8 +37,8 @@ class ScopeOptionsUnitTest {
     @Test
     fun `appendDescendant sets next of tail`() {
         val root = ScopeOptions(RootScope::class.java, ScopeArguments.Empty, null)
-        val firstDescendant = ScopeOptions(Scope1::class.java, ScopeArguments.Empty, RootScope::class.java, storeInPrevious = true)
-        val secondDescendant = ScopeOptions(Scope2::class.java, ScopeArguments.Empty, Scope1::class.java, storeInPrevious = true)
+        val firstDescendant = ScopeOptions(Scope1::class.java, ScopeArguments.Empty, RootScope::class.java, managedByParent = true)
+        val secondDescendant = ScopeOptions(Scope2::class.java, ScopeArguments.Empty, Scope1::class.java, managedByParent = true)
         root.appendTail(firstDescendant)
         root.appendTail(secondDescendant)
 
@@ -73,7 +73,7 @@ class ScopeOptionsUnitTest {
     @Test
     fun `removeStartingFrom(nodeNotInChain) doesn't change the chain`() {
         val (root, _, secondDescendant) = createSampleScopeOptions()
-        val nodeNotInChain = ScopeOptions(UnrelatedScope::class.java, ScopeArguments.Empty, null, storeInPrevious = true)
+        val nodeNotInChain = ScopeOptions(UnrelatedScope::class.java, ScopeArguments.Empty, null, managedByParent = true)
 
         root.removeStartingFrom(nodeNotInChain.name, null)
         assertSame(secondDescendant, root.tail)
@@ -97,8 +97,8 @@ class ScopeOptionsUnitTest {
 
     private fun createSampleScopeOptions(): List<ScopeOptions> {
         val root = ScopeOptions(RootScope::class.java, ScopeArguments.Empty, null)
-        val firstDescendant = ScopeOptions(Scope1::class.java, ScopeArguments.Empty, RootScope::class.java, storeInPrevious = true)
-        val secondDescendant = ScopeOptions(Scope2::class.java, ScopeArguments.Empty, Scope1::class.java, storeInPrevious = true)
+        val firstDescendant = ScopeOptions(Scope1::class.java, ScopeArguments.Empty, RootScope::class.java, managedByParent = true)
+        val secondDescendant = ScopeOptions(Scope2::class.java, ScopeArguments.Empty, Scope1::class.java, managedByParent = true)
         root.appendTail(firstDescendant)
         root.appendTail(secondDescendant)
         return listOf(root, firstDescendant, secondDescendant)

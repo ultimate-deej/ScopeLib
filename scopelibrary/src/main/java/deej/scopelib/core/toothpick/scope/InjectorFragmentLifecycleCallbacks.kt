@@ -21,7 +21,7 @@ class InjectorFragmentLifecycleCallbacks(
 
         if (f is OpensScope) {
             val fragmentScopeOptions = f.scopeOptions
-            if (fragmentScopeOptions.storeInPrevious) {
+            if (fragmentScopeOptions.managedByParent) {
                 containerScopeOptions.appendTail(fragmentScopeOptions)
             }
             ensureScopes(fragmentScopeOptions)

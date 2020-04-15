@@ -15,7 +15,7 @@ object Screens {
     }
 
     class ScopedHome : SupportAppScreen(), OpensScope2 {
-        override val scopeOptions = ScopeOptions(ScopeName.Home, ScopeArguments.Empty, ScopeName.Root, storeInPrevious = true)
+        override val scopeOptions = ScopeOptions(ScopeName.Home, ScopeArguments.Empty, ScopeName.Root, managedByParent = true)
 
         override fun getFragment() = ScopedHomeFragment().also {
             it.scopeOptions = scopeOptions
@@ -26,12 +26,12 @@ object Screens {
         override fun getFragment() = SimpleTabFragment()
     }
 
-    class SimpleScopedTab(storeInPrevious: Boolean) : SupportAppScreen(), OpensScope2 {
+    class SimpleScopedTab(managedByParent: Boolean) : SupportAppScreen(), OpensScope2 {
         override val scopeOptions = ScopeOptions(
             ScopeName.SimpleTab,
             SimpleTabScopeArguments(Random.nextInt(0..100)),
             ScopeName.Home,
-            storeInPrevious = storeInPrevious
+            managedByParent = managedByParent
         )
 
         override fun getFragment() = SimpleScopedTabFragment().also {

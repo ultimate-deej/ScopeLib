@@ -10,7 +10,7 @@ data class ScopeOptions(
     val name: @WriteWith<ScopeAnnotationParceler> Class<out Annotation>,
     val scopeArguments: ScopeArguments,
     val parentName: @WriteWith<ScopeAnnotationParceler> Class<out Annotation>?,
-    val storeInPrevious: Boolean = false,
+    val managedByParent: Boolean = false,
     val instanceId: String = UUID.randomUUID().toString(),
     var next: ScopeOptions? = null
 ) : Parcelable {
@@ -18,7 +18,7 @@ data class ScopeOptions(
         get() = next?.tail ?: this
 
     fun appendTail(newTail: ScopeOptions) {
-        check(newTail.storeInPrevious) { "storeInPrevious is false in $newTail" }
+        check(newTail.managedByParent) { "managedByParent is false in $newTail" }
         if (newTail.name == name) {
             check(newTail.instanceId == instanceId) { "Cycle detected while trying to append $newTail" }
             return
@@ -38,7 +38,7 @@ data class ScopeOptions(
             val next = node.next
             if (next?.name == name) {
                 if (instanceId == null || next.instanceId == instanceId) {
-                    check(next.storeInPrevious)
+                    check(next.managedByParent)
                     node.next = null
                 }
                 return
