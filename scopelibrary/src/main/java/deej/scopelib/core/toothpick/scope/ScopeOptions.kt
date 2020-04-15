@@ -18,7 +18,7 @@ data class ScopeOptions(
         get() = next?.tail ?: this
 
     fun appendTail(newTail: ScopeOptions) {
-        check(newTail.storeInPrevious)
+        check(newTail.storeInPrevious) { "storeInPrevious is false in $newTail" }
         if (newTail.name == name) {
             check(newTail.instanceId == instanceId) { "Cycle detected while trying to append $newTail" }
             return
