@@ -7,13 +7,13 @@ import butterknife.BindView
 import butterknife.OnClick
 import deej.scopelib.core.toothpick.scope.UsesScope
 import deej.thoroughtestapp.R
-import deej.thoroughtestapp.core.toothpick.scope.ScopeName
+import deej.thoroughtestapp.core.toothpick.scope.RootScope
 import deej.thoroughtestapp.presentation.base.BaseFragment
 import deej.thoroughtestapp.presentation.navigation.coordinators.RootCoordinator
 import javax.inject.Inject
 
 class HomeFragment : BaseFragment(R.layout.fragment_home), UsesScope {
-    override val usedScopeName get() = ScopeName.Root
+    override val usedScopeName get() = RootScope::class.java
 
     @BindView(R.id.button) lateinit var button: Button
 

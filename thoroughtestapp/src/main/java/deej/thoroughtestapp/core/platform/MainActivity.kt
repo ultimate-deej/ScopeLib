@@ -8,7 +8,7 @@ import deej.scopelib.core.toothpick.scope.*
 import deej.thoroughtestapp.R
 import deej.thoroughtestapp.core.toothpick.modules.NavigationModule
 import deej.thoroughtestapp.core.toothpick.qualifiers.ActivityNavigation
-import deej.thoroughtestapp.core.toothpick.scope.ScopeName
+import deej.thoroughtestapp.core.toothpick.scope.RootScope
 import deej.thoroughtestapp.presentation.navigation.coordinators.RootCoordinator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), OpensScope {
     }
 
     private fun initColdStartScopeOptions() {
-        scopeOptions = ScopeOptions(ScopeName.Root, ScopeArguments.Empty, null, instanceId = "Singleton root scope")
+        scopeOptions = ScopeOptions(RootScope::class.java, ScopeArguments.Empty, null, instanceId = "Singleton root scope")
     }
 
     private fun restoreScopeOptions(savedInstanceState: Bundle) {
