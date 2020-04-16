@@ -8,8 +8,7 @@ import toothpick.Toothpick
 import toothpick.ktp.extension.getInstance
 
 class InjectorFragmentLifecycleCallbacks(
-    private val containerScopeOptions: ScopeOptions,
-    private val log: Boolean = false
+    private val containerScopeOptions: ScopeOptions
 ) : FragmentManager.FragmentLifecycleCallbacks() {
 
     override fun onFragmentPreCreated(fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?) {

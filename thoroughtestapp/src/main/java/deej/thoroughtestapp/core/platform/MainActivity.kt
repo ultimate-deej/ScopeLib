@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), OpensScope {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         initScope(savedInstanceState).inject(this)
-        supportFragmentManager.registerFragmentLifecycleCallbacks(InjectorFragmentLifecycleCallbacks(scopeOptions, true), false)
+        supportFragmentManager.registerFragmentLifecycleCallbacks(InjectorFragmentLifecycleCallbacks(scopeOptions), false)
 
         super.onCreate(savedInstanceState)
 

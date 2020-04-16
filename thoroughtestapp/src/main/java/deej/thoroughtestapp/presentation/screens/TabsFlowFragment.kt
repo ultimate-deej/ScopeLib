@@ -25,7 +25,7 @@ class TabsFlowFragment : BaseFragment(R.layout.flow_tabs), OpensScopeFragment, B
     @Inject @TabsParam lateinit var paramFromScope: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        childFragmentManager.registerFragmentLifecycleCallbacks(InjectorFragmentLifecycleCallbacks(scopeOptions, true), false)
+        childFragmentManager.registerFragmentLifecycleCallbacks(InjectorFragmentLifecycleCallbacks(scopeOptions), false)
 
         super.onCreate(savedInstanceState)
     }
