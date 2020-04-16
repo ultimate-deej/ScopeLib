@@ -1,8 +1,7 @@
 package deej.thoroughtestapp.presentation.navigation.cicerone
 
 import deej.scopelib.core.toothpick.scope.ScopeOptions
-import deej.scopelib.core.toothpick.scope.scopeOptions
-import deej.scopelib.core.toothpick.scope.usedScopeName
+import deej.scopelib.core.toothpick.scope.attachScopeOptions
 import deej.thoroughtestapp.core.toothpick.scope.HomeScope
 import deej.thoroughtestapp.core.toothpick.scope.TabsScope
 import deej.thoroughtestapp.presentation.scopearguments.TabsScopeArguments
@@ -14,8 +13,7 @@ object Flows {
         override val scopeOptions = ScopeOptions(TabsScope::class.java, TabsScopeArguments("Injected Tabs Param"), HomeScope::class.java, managedByParent = true)
 
         override fun getFragment() = TabsFlowFragment().also {
-            it.scopeOptions = scopeOptions
-            it.usedScopeName = scopeOptions.name
+            it.attachScopeOptions(scopeOptions)
         }
     }
 

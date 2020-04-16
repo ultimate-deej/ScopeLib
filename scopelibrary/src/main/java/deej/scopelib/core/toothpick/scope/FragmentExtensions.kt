@@ -4,14 +4,18 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 
 // TODO: internal
-var Fragment.scopeOptions: ScopeOptions?
-    get() = arguments?.getParcelable(ARGUMENT_SCOPE_OPTIONS)
-    set(value) {
-        if (arguments == null) {
-            arguments = Bundle()
-        }
-        requireArguments().putParcelable(ARGUMENT_SCOPE_OPTIONS, value)
+fun Fragment.attachScopeOptions(scopeOptions: ScopeOptions, alsoUse: Boolean = true) {
+    if (arguments == null) {
+        arguments = Bundle()
     }
+    requireArguments().putParcelable(ARGUMENT_SCOPE_OPTIONS, scopeOptions)
+    if (alsoUse) {
+        usedScopeName = scopeOptions.name
+    }
+}
+
+val Fragment.scopeOptions: ScopeOptions?
+    get() = arguments?.getParcelable(ARGUMENT_SCOPE_OPTIONS)
 
 var Fragment.usedScopeName: Class<out Annotation>?
     @Suppress("UNCHECKED_CAST")

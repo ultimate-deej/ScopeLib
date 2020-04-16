@@ -2,7 +2,7 @@ package deej.thoroughtestapp.presentation.navigation.cicerone
 
 import deej.scopelib.core.toothpick.scope.ScopeArguments
 import deej.scopelib.core.toothpick.scope.ScopeOptions
-import deej.scopelib.core.toothpick.scope.scopeOptions
+import deej.scopelib.core.toothpick.scope.attachScopeOptions
 import deej.scopelib.core.toothpick.scope.usedScopeName
 import deej.thoroughtestapp.core.toothpick.scope.HomeScope
 import deej.thoroughtestapp.core.toothpick.scope.RootScope
@@ -24,8 +24,7 @@ object Screens {
         override val scopeOptions = ScopeOptions(HomeScope::class.java, ScopeArguments.Empty, RootScope::class.java, managedByParent = true)
 
         override fun getFragment() = ScopedHomeFragment().also {
-            it.scopeOptions = scopeOptions
-            it.usedScopeName = scopeOptions.name
+            it.attachScopeOptions(scopeOptions)
         }
     }
 
@@ -44,8 +43,7 @@ object Screens {
         )
 
         override fun getFragment() = SimpleScopedTabFragment().also {
-            it.scopeOptions = scopeOptions
-            it.usedScopeName = scopeOptions.name
+            it.attachScopeOptions(scopeOptions)
         }
     }
 
