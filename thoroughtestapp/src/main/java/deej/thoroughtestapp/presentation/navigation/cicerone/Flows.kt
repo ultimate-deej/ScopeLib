@@ -1,6 +1,7 @@
 package deej.thoroughtestapp.presentation.navigation.cicerone
 
 import deej.scopelib.core.toothpick.scope.ScopeOptions
+import deej.scopelib.core.toothpick.scope.scopeOptions
 import deej.thoroughtestapp.core.toothpick.scope.HomeScope
 import deej.thoroughtestapp.core.toothpick.scope.TabsScope
 import deej.thoroughtestapp.presentation.scopearguments.TabsScopeArguments

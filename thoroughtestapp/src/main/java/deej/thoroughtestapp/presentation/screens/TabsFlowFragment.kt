@@ -10,22 +10,26 @@ import androidx.fragment.app.commitNow
 import butterknife.BindView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import deej.scopelib.core.toothpick.scope.InjectorFragmentLifecycleCallbacks
-import deej.scopelib.core.toothpick.scope.OpensScopeFragment
+import deej.scopelib.core.toothpick.scope.UsesScope
+import deej.scopelib.core.toothpick.scope.scopeOptions
 import deej.thoroughtestapp.R
 import deej.thoroughtestapp.core.toothpick.qualifiers.TabsParam
+import deej.thoroughtestapp.core.toothpick.scope.TabsScope
 import deej.thoroughtestapp.presentation.base.BaseFragment
 import deej.thoroughtestapp.presentation.navigation.cicerone.Flows
 import deej.thoroughtestapp.presentation.navigation.cicerone.Screens
 import javax.inject.Inject
 
-class TabsFlowFragment : BaseFragment(R.layout.flow_tabs), OpensScopeFragment, BottomNavigationView.OnNavigationItemSelectedListener {
+class TabsFlowFragment : BaseFragment(R.layout.flow_tabs), BottomNavigationView.OnNavigationItemSelectedListener, UsesScope {
+    override val usedScopeName = TabsScope::class.java
+
     @BindView(R.id.title) lateinit var titleLabel: TextView
     @BindView(R.id.bottomNavigation) lateinit var bottomNavigationView: BottomNavigationView
 
     @Inject @TabsParam lateinit var paramFromScope: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        childFragmentManager.registerFragmentLifecycleCallbacks(InjectorFragmentLifecycleCallbacks(scopeOptions), false)
+        childFragmentManager.registerFragmentLifecycleCallbacks(InjectorFragmentLifecycleCallbacks(scopeOptions!!), false)
 
         super.onCreate(savedInstanceState)
     }

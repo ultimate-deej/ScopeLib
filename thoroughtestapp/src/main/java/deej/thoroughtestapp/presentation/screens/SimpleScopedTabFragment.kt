@@ -6,14 +6,17 @@ import android.widget.Button
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.OnClick
-import deej.scopelib.core.toothpick.scope.OpensScopeFragment
+import deej.scopelib.core.toothpick.scope.UsesScope
 import deej.thoroughtestapp.R
 import deej.thoroughtestapp.core.toothpick.qualifiers.SimpleScopedTabParam
+import deej.thoroughtestapp.core.toothpick.scope.SimpleTabScope
 import deej.thoroughtestapp.presentation.base.BaseFragment
 import deej.thoroughtestapp.presentation.navigation.coordinators.RootCoordinator
 import javax.inject.Inject
 
-class SimpleScopedTabFragment : BaseFragment(R.layout.fragment_simple_scoped_tab), OpensScopeFragment {
+class SimpleScopedTabFragment : BaseFragment(R.layout.fragment_simple_scoped_tab), UsesScope {
+    override val usedScopeName = SimpleTabScope::class.java
+
     @BindView(R.id.content) lateinit var label: TextView
 
     @Inject @SimpleScopedTabParam lateinit var valueFromScope: String

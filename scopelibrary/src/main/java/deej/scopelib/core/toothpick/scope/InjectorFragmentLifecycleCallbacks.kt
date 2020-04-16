@@ -18,8 +18,8 @@ class InjectorFragmentLifecycleCallbacks(
         // Make sure all preconditions are satisfied.
         ensureScopes(containerScopeOptions)
 
-        if (f is OpensScope) {
-            val fragmentScopeOptions = f.scopeOptions
+        val fragmentScopeOptions = f.scopeOptions
+        if (fragmentScopeOptions != null) {
             if (fragmentScopeOptions.managedByParent) {
                 containerScopeOptions.appendTail(fragmentScopeOptions)
             }
@@ -33,10 +33,8 @@ class InjectorFragmentLifecycleCallbacks(
     }
 
     override fun onFragmentDestroyed(fm: FragmentManager, f: Fragment) {
-        if (f !is OpensScope) return
+        val scopeOptionsInFragment = f.scopeOptions ?: return
         if (f.isStateSaved) return
-
-        val scopeOptionsInFragment = f.scopeOptions
 
         if (isSameAsLive(scopeOptionsInFragment)) {
             Toothpick.closeScope(scopeOptionsInFragment.name)

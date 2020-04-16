@@ -18,7 +18,7 @@ import toothpick.Toothpick
 import toothpick.smoothie.module.SmoothieApplicationModule
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(R.layout.activity_main), OpensScope {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
     @Inject lateinit var coordinator: RootCoordinator
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
@@ -89,5 +89,5 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), OpensScope {
         scopeOptions = savedInstanceState.getParcelable(ScopeOptions::class.java.name)!!
     }
 
-    override lateinit var scopeOptions: ScopeOptions
+    lateinit var scopeOptions: ScopeOptions
 }
