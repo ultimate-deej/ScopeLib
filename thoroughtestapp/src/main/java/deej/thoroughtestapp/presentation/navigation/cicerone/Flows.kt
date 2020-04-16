@@ -8,10 +8,9 @@ import deej.thoroughtestapp.core.toothpick.scope.TabsScope
 import deej.thoroughtestapp.presentation.scopearguments.TabsScopeArguments
 import deej.thoroughtestapp.presentation.screens.ListFlowFragment
 import deej.thoroughtestapp.presentation.screens.TabsFlowFragment
-import ru.terrakok.cicerone.android.support.SupportAppScreen
 
 object Flows {
-    class Tabs : SupportAppScreen(), OpensScope2 {
+    class Tabs : ScopeLibAppScreen() {
         override val scopeOptions = ScopeOptions(TabsScope::class.java, TabsScopeArguments("Injected Tabs Param"), HomeScope::class.java, managedByParent = true)
 
         override fun getFragment() = TabsFlowFragment().also {
@@ -20,7 +19,7 @@ object Flows {
         }
     }
 
-    object List : SupportAppScreen() {
+    object List : ScopeLibAppScreen() {
         override fun getFragment() = ListFlowFragment()
     }
 }
