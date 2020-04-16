@@ -1,2 +1,2 @@
-include ':app', ':thoroughtestapp', ':scopelibrary'
+include ':thoroughtestapp', ':scopelibrary'
 rootProject.name='Scope Lib'
