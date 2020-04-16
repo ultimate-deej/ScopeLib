@@ -12,8 +12,6 @@ class InjectorFragmentLifecycleCallbacks(
 ) : FragmentManager.FragmentLifecycleCallbacks() {
 
     override fun onFragmentPreCreated(fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?) {
-        if (f !is UsesScope) return
-
         // We might have modified containerScopeOptions chain before adding the fragment `f`.
         // Make sure all preconditions are satisfied.
         ensureScopes(containerScopeOptions)
@@ -26,10 +24,13 @@ class InjectorFragmentLifecycleCallbacks(
             ensureScopes(fragmentScopeOptions)
         }
 
-        check(Toothpick.isScopeOpen(f.usedScopeName))
+        val usedScopeName = f.usedScopeName
+        if (usedScopeName != null) {
+            check(Toothpick.isScopeOpen(usedScopeName))
 
-        Toothpick.openScope(f.usedScopeName)
-            .inject(f)
+            Toothpick.openScope(usedScopeName)
+                .inject(f)
+        }
     }
 
     override fun onFragmentDestroyed(fm: FragmentManager, f: Fragment) {
