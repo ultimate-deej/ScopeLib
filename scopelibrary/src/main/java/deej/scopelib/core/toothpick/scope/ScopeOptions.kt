@@ -47,4 +47,6 @@ data class ScopeOptions(
             node = next
         }
     }
+
+    override fun toString() = "${name.simpleName}($scopeArguments)[${instanceId.take(8)}]{parent=${parentName?.simpleName}}"
 }
