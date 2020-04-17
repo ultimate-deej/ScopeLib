@@ -8,5 +8,7 @@ abstract class ScopeArguments : Parcelable {
     open fun createModules(): Array<Module> = emptyArray()
 
     @Parcelize
-    object Empty : ScopeArguments()
+    object Empty : ScopeArguments() {
+        override fun toString() = "Empty"
+    }
 }
