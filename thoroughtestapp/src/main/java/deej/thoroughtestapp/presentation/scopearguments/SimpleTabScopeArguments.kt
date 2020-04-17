@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 import toothpick.config.Module
 
 @Parcelize
-class SimpleTabScopeArguments(private val param: Int) : ScopeArguments() {
+data class SimpleTabScopeArguments(private val param: Int) : ScopeArguments() {
     override fun createModules(): Array<Module> = arrayOf(
         SimpleScopedTabModule(param)
     )
