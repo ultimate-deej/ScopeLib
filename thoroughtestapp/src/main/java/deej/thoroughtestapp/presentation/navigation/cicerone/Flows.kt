@@ -10,7 +10,7 @@ import deej.thoroughtestapp.presentation.screens.TabsFlowFragment
 
 object Flows {
     class Tabs : ScopeLibAppScreen() {
-        override val scopeOptions = ScopeOptions(TabsScope::class.java, TabsScopeArguments("Injected Tabs Param"), HomeScope::class.java)
+        override val scopeOptions = ScopeOptions.withUniqueId(TabsScope::class.java, TabsScopeArguments("Injected Tabs Param"), HomeScope::class.java)
 
         override fun getFragment() = TabsFlowFragment().also {
             it.attachScopeOptions(scopeOptions)

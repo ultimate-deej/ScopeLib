@@ -10,7 +10,7 @@ data class ScopeOptions(
     val name: @WriteWith<ScopeAnnotationParceler> Class<out Annotation>,
     val scopeArguments: ScopeArguments,
     val parentName: @WriteWith<ScopeAnnotationParceler> Class<out Annotation>,
-    val instanceId: String = UUID.randomUUID().toString()
+    val instanceId: String
 ) : Parcelable {
     override fun toString() = "${name.simpleName}($scopeArguments)[${instanceId.take(8)}]{parent=${parentName.simpleName}}"
 
@@ -30,5 +30,10 @@ data class ScopeOptions(
         var result = name.hashCode()
         result = 31 * result + instanceId.hashCode()
         return result
+    }
+
+    companion object {
+        fun withUniqueId(name: Class<out Annotation>, scopeArguments: ScopeArguments, parentName: Class<out Annotation>) =
+            ScopeOptions(name, scopeArguments, parentName, UUID.randomUUID().toString())
     }
 }
