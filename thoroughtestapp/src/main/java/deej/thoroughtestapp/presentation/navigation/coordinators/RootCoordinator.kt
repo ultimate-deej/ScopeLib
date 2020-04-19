@@ -29,7 +29,7 @@ class RootCoordinator(
     }
 
     fun replacementChain() {
-        val screens = arrayOf(Screens.Home, Screens.ScopedHome(), Screens.SimpleScopedTab(true))
+        val screens = arrayOf(Screens.Home, Screens.ScopedHome(), Screens.SimpleScopedTab())
         for (screen in screens) {
             screen.scopeOptions?.let(scopeOptionsManager::overwrite)
         }
