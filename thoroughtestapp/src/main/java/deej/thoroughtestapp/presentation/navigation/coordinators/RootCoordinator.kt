@@ -1,6 +1,6 @@
 package deej.thoroughtestapp.presentation.navigation.coordinators
 
-import deej.scopelib.core.toothpick.scope.ScopeOptions
+import deej.scopelib.core.toothpick.scope.ScopeOptionsManager
 import deej.thoroughtestapp.core.toothpick.qualifiers.ActivityNavigation
 import deej.thoroughtestapp.core.toothpick.scope.RootScope
 import deej.thoroughtestapp.presentation.navigation.cicerone.Flows
@@ -11,7 +11,7 @@ import toothpick.InjectConstructor
 @RootScope
 @InjectConstructor
 class RootCoordinator(
-    private val scopeOptions: ScopeOptions,
+    private val scopeOptionsManager: ScopeOptionsManager,
     @ActivityNavigation private val router: Router
 ) {
     fun home() = router.newRootScreen(Screens.Home)
@@ -22,20 +22,16 @@ class RootCoordinator(
 
     fun tabsViaNewChain() {
         val screens = arrayOf(Screens.Home, Screens.ScopedHome(), Flows.Tabs())
-        screens.mapNotNull { it.scopeOptions }.forEach {
-            scopeOptions.removeStartingFrom(it.name, null)
-            scopeOptions.appendTail(it)
+        for (screen in screens) {
+            screen.scopeOptions?.let(scopeOptionsManager::overwrite)
         }
         router.newRootChain(*screens)
     }
 
     fun replacementChain() {
         val screens = arrayOf(Screens.Home, Screens.ScopedHome(), Screens.SimpleScopedTab(true))
-        // TODO: Here I'm doing something similar to what InjectorFragmentLifecycleCallbacks does
-        //  Maybe it's reasonable to move such high-level methods to ScopeController? Or not, it's not that complicated here.
-        screens.mapNotNull { it.scopeOptions }.forEach {
-            scopeOptions.removeStartingFrom(it.name, null)
-            scopeOptions.appendTail(it)
+        for (screen in screens) {
+            screen.scopeOptions?.let(scopeOptionsManager::overwrite)
         }
 
         router.newRootChain(*screens)

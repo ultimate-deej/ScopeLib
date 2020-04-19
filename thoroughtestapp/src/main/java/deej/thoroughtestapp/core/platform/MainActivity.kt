@@ -19,6 +19,8 @@ import toothpick.smoothie.module.SmoothieApplicationModule
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
+    private lateinit var scopeOptionsManager: ScopeOptionsManager
+
     @Inject lateinit var coordinator: RootCoordinator
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
@@ -37,8 +39,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        initScopeOptionsManager(savedInstanceState)
         initScope(savedInstanceState).inject(this)
-        supportFragmentManager.registerFragmentLifecycleCallbacks(InjectorFragmentLifecycleCallbacks(scopeOptions), false)
+        supportFragmentManager.registerFragmentLifecycleCallbacks(ScopeOptionsManagerCallbacks(scopeOptionsManager), true)
 
         super.onCreate(savedInstanceState)
 
@@ -69,16 +72,25 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         return Toothpick.openScope(scopeOptions.name)
             .installModules(
+                ScopeOptionsManagerModule(scopeOptionsManager),
                 ScopeOptionsModule(scopeOptions),
                 SmoothieApplicationModule(application),
                 NavigationModule<ActivityNavigation>(isDefault = true)
             )
     }
 
+    private fun initScopeOptionsManager(savedInstanceState: Bundle?) {
+        scopeOptionsManager = if (savedInstanceState == null)
+            ScopeOptionsManager()
+        else
+            savedInstanceState.getParcelable(ScopeOptionsManager::class.java.name)!!
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
         outState.putParcelable(ScopeOptions::class.java.name, scopeOptions)
+        outState.putParcelable(ScopeOptionsManager::class.java.name, scopeOptionsManager)
     }
 
     private fun initColdStartScopeOptions() {
