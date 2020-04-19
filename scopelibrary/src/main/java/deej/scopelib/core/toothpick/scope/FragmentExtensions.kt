@@ -27,6 +27,12 @@ var Fragment.usedScopeName: Class<out Annotation>?
         requireArguments().putString(ARGUMENT_USED_SCOPE_NAME, value?.name)
     }
 
+val Fragment.isDropping: Boolean
+    get() = when (val parent = parentFragment) {
+        null -> !isStateSaved && isRemoving
+        else -> parent.isDropping // If any of the ancestors is being dropped, we are too
+    }
+
 // TODO: full package name?
 private const val ARGUMENT_SCOPE_OPTIONS = "deej.scopelib.scopeOptions"
 private const val ARGUMENT_USED_SCOPE_NAME = "deej.scopelib.usedScopeName"
