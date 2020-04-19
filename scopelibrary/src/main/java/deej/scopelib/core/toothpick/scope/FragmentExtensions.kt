@@ -3,7 +3,6 @@ package deej.scopelib.core.toothpick.scope
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 
-// TODO: internal
 fun Fragment.attachScopeOptions(scopeOptions: ScopeOptions, alsoUse: Boolean = true) {
     if (arguments == null) {
         arguments = Bundle()
@@ -13,9 +12,6 @@ fun Fragment.attachScopeOptions(scopeOptions: ScopeOptions, alsoUse: Boolean = t
         usedScopeName = scopeOptions.name
     }
 }
-
-val Fragment.scopeOptions: ScopeOptions?
-    get() = arguments?.getParcelable(ARGUMENT_SCOPE_OPTIONS)
 
 var Fragment.usedScopeName: Class<out Annotation>?
     @Suppress("UNCHECKED_CAST")
@@ -27,7 +23,10 @@ var Fragment.usedScopeName: Class<out Annotation>?
         requireArguments().putString(ARGUMENT_USED_SCOPE_NAME, value?.name)
     }
 
-val Fragment.isDropping: Boolean
+internal val Fragment.scopeOptions: ScopeOptions?
+    get() = arguments?.getParcelable(ARGUMENT_SCOPE_OPTIONS)
+
+internal val Fragment.isDropping: Boolean
     get() = when (val parent = parentFragment) {
         null -> !isStateSaved && isRemoving
         else -> parent.isDropping // If any of the ancestors is being dropped, we are too
