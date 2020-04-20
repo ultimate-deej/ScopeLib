@@ -27,7 +27,7 @@ class ScopeOptionsManager(
 
     fun removeAndClose(scopeOptions: ScopeOptions) {
         items.remove(scopeOptions)
-        if (isSameAsLive(scopeOptions)) {
+        if (isSameAsMaterialized(scopeOptions)) {
             Toothpick.closeScope(scopeOptions.name)
             cleanOrphansOf(scopeOptions.name)
         }
@@ -35,7 +35,7 @@ class ScopeOptionsManager(
 
     fun materialize() {
         for (scopeOptions in items) {
-            if (!isSameAsLive(scopeOptions)) {
+            if (!isSameAsMaterialized(scopeOptions)) {
                 Toothpick.closeScope(scopeOptions.name)
                 check(Toothpick.isScopeOpen(scopeOptions.parentName)) { "Can't open $scopeOptions since its parent isn't open" }
                 Toothpick.openScopes(scopeOptions.parentName, scopeOptions.name)
@@ -44,7 +44,7 @@ class ScopeOptionsManager(
         }
     }
 
-    private fun isSameAsLive(scopeOptions: ScopeOptions): Boolean {
+    private fun isSameAsMaterialized(scopeOptions: ScopeOptions): Boolean {
         if (!Toothpick.isScopeOpen(scopeOptions.name)) return false
 
         val liveScopeOptions = Toothpick.openScope(scopeOptions.name).getInstance<ScopeOptions>()
