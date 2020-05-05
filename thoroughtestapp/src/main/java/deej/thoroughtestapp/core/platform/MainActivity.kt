@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     @Inject lateinit var navigatorHolder: NavigatorHolder
     private val navigator = object : SupportAppNavigator(this, supportFragmentManager, R.id.content) {
-        override fun setupFragmentTransaction(command: Command, currentFragment: Fragment?, nextFragment: Fragment, fragmentTransaction: FragmentTransaction) {
+        override fun setupFragmentTransaction(command: Command, currentFragment: Fragment?, nextFragment: Fragment?, fragmentTransaction: FragmentTransaction) {
             fragmentTransaction.setReorderingAllowed(true)
         }
 
