@@ -13,10 +13,14 @@ fun Fragment.attachScopeOptions(scopeOptions: ScopeOptions, alsoUse: Boolean = t
     }
 }
 
-var Fragment.usedScopeName: Class<out Annotation>?
+fun Fragment.useScope(name: Class<out Annotation>?) {
+    usedScopeName = name
+}
+
+internal var Fragment.usedScopeName: Class<out Annotation>?
     @Suppress("UNCHECKED_CAST")
     get() = arguments?.getString(ARGUMENT_USED_SCOPE_NAME)?.let { Class.forName(it) } as Class<out Annotation>?
-    set(value) {
+    private set(value) {
         if (arguments == null) {
             arguments = Bundle()
         }

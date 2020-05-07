@@ -3,7 +3,7 @@ package deej.thoroughtestapp.presentation.navigation.cicerone
 import deej.scopelib.core.toothpick.scope.ScopeArguments
 import deej.scopelib.core.toothpick.scope.ScopeOptions
 import deej.scopelib.core.toothpick.scope.attachScopeOptions
-import deej.scopelib.core.toothpick.scope.usedScopeName
+import deej.scopelib.core.toothpick.scope.useScope
 import deej.thoroughtestapp.core.toothpick.scope.HomeScope
 import deej.thoroughtestapp.core.toothpick.scope.RootScope
 import deej.thoroughtestapp.core.toothpick.scope.SimpleTabScope
@@ -16,7 +16,7 @@ import kotlin.random.nextInt
 object Screens {
     object Home : ScopeLibAppScreen() {
         override fun getFragment() = HomeFragment().also {
-            it.usedScopeName = RootScope::class.java
+            it.useScope(RootScope::class.java)
         }
     }
 
@@ -30,7 +30,7 @@ object Screens {
 
     object SimpleTab : ScopeLibAppScreen() {
         override fun getFragment() = SimpleTabFragment().also {
-            it.usedScopeName = TabsScope::class.java
+            it.useScope(TabsScope::class.java)
         }
     }
 
