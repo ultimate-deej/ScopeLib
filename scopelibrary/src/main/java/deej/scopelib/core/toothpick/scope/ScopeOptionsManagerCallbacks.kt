@@ -15,7 +15,7 @@ class ScopeOptionsManagerCallbacks(
         // If the fragment specifies a scope name to use, inject
         f.usedScopeName?.let { usedScopeName ->
             scopeOptionsManager.materialize()
-            check(Toothpick.isScopeOpen(usedScopeName)) { "Required scope `${usedScopeName.simpleName}` is not open" }
+            check(Toothpick.isScopeOpen(usedScopeName)) { "Required scope `${formatScopeName(usedScopeName)}` is not open" }
             Toothpick.openScope(usedScopeName)
                 .inject(f)
         }

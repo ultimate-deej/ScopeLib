@@ -7,12 +7,17 @@ import java.util.*
 
 @Parcelize
 data class ScopeOptions(
-    val name: @WriteWith<ScopeAnnotationParceler> Class<out Annotation>,
+    val name: @WriteWith<ScopeNameParceler> Any,
     val scopeArguments: ScopeArguments,
-    val parentName: @WriteWith<ScopeAnnotationParceler> Class<out Annotation>,
+    val parentName: @WriteWith<ScopeNameParceler> Any,
     val instanceId: String
 ) : Parcelable {
-    override fun toString() = "${name.simpleName}($scopeArguments)[${instanceId.take(8)}]{parent=${parentName.simpleName}}"
+    init {
+        ScopeNameParceler.checkSupported(name)
+        ScopeNameParceler.checkSupported(parentName)
+    }
+
+    override fun toString() = "${formatScopeName(name)}($scopeArguments)[${instanceId.take(8)}]{parent=${formatScopeName(parentName)}}"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -33,7 +38,7 @@ data class ScopeOptions(
     }
 
     companion object {
-        fun withUniqueId(name: Class<out Annotation>, scopeArguments: ScopeArguments, parentName: Class<out Annotation>) =
+        fun withUniqueId(name: Any, scopeArguments: ScopeArguments, parentName: Any) =
             ScopeOptions(name, scopeArguments, parentName, UUID.randomUUID().toString())
     }
 }

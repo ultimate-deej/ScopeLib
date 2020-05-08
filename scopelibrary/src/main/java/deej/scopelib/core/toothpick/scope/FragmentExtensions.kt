@@ -1,7 +1,10 @@
 package deej.scopelib.core.toothpick.scope
 
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.fragment.app.Fragment
+import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.WriteWith
 
 fun Fragment.attachScopeOptions(scopeOptions: ScopeOptions, alsoUse: Boolean = true) {
     if (arguments == null) {
@@ -13,14 +16,22 @@ fun Fragment.attachScopeOptions(scopeOptions: ScopeOptions, alsoUse: Boolean = t
     }
 }
 
-var Fragment.usedScopeName: Class<out Annotation>?
-    @Suppress("UNCHECKED_CAST")
-    get() = arguments?.getString(ARGUMENT_USED_SCOPE_NAME)?.let { Class.forName(it) } as Class<out Annotation>?
-    set(value) {
+fun Fragment.useScope(name: Any?) {
+    usedScopeName = name
+}
+
+internal var Fragment.usedScopeName: Any?
+    get() {
+        val scopeName = arguments?.getParcelable(ARGUMENT_USED_SCOPE_NAME) as ScopeName?
+        return scopeName?.value
+    }
+    private set(value) {
+        value?.let(ScopeNameParceler::checkSupported)
+
         if (arguments == null) {
             arguments = Bundle()
         }
-        requireArguments().putString(ARGUMENT_USED_SCOPE_NAME, value?.name)
+        requireArguments().putParcelable(ARGUMENT_USED_SCOPE_NAME, value?.let(::ScopeName))
     }
 
 internal val Fragment.scopeOptions: ScopeOptions?
@@ -31,6 +42,9 @@ internal val Fragment.isDropping: Boolean
         null -> !isStateSaved && isRemoving
         else -> parent.isDropping // If any of the ancestors is being dropped, we are too
     }
+
+@Parcelize
+private class ScopeName(val value: @WriteWith<ScopeNameParceler> Any) : Parcelable
 
 // TODO: full package name?
 private const val ARGUMENT_SCOPE_OPTIONS = "deej.scopelib.scopeOptions"

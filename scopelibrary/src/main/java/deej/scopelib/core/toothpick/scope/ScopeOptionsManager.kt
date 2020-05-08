@@ -51,7 +51,7 @@ class ScopeOptionsManager(
         return scopeOptions == liveScopeOptions
     }
 
-    private fun cleanOrphansOf(parentName: Class<out Annotation>) {
+    private fun cleanOrphansOf(parentName: Any) {
         val orphans = items.filter { it.parentName == parentName }
         items.removeAll(orphans)
         orphans.forEach { cleanOrphansOf(it.name) }
