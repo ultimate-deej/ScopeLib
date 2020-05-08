@@ -6,6 +6,7 @@ import deej.thoroughtestapp.core.toothpick.scope.HomeScope
 import deej.thoroughtestapp.core.toothpick.scope.RootScope
 import deej.thoroughtestapp.core.toothpick.scope.SimpleTabScope
 import deej.thoroughtestapp.core.toothpick.scope.TabsScope
+import deej.thoroughtestapp.presentation.scopearguments.NestingScopeArguments
 import deej.thoroughtestapp.presentation.scopearguments.SimpleTabScopeArguments
 import deej.thoroughtestapp.presentation.screens.*
 import ru.terrakok.cicerone.android.support.SupportAppScreen
@@ -46,7 +47,13 @@ object Screens {
         override fun getFragment() = ItemDetailsFragment()
     }
 
-    object Nesting : SupportAppScreen() {
-        override fun getFragment() = NestingFragment()
+    class Nesting(level: Int, parentScopeName: Any) : ScopeLibAppScreen() {
+        override val scopeOptions = ScopeOptions.withUniqueId(
+            "Nesting level $level",
+            NestingScopeArguments(level),
+            parentScopeName
+        )
+
+        override fun createFragment() = NestingFragment()
     }
 }

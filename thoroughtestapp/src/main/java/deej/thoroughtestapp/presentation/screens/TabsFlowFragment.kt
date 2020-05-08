@@ -14,6 +14,7 @@ import deej.thoroughtestapp.core.toothpick.qualifiers.TabsParam
 import deej.thoroughtestapp.presentation.base.BaseFragment
 import deej.thoroughtestapp.presentation.navigation.cicerone.Flows
 import deej.thoroughtestapp.presentation.navigation.cicerone.Screens
+import toothpick.Scope
 import javax.inject.Inject
 
 class TabsFlowFragment : BaseFragment(R.layout.flow_tabs), BottomNavigationView.OnNavigationItemSelectedListener {
@@ -21,6 +22,7 @@ class TabsFlowFragment : BaseFragment(R.layout.flow_tabs), BottomNavigationView.
     @BindView(R.id.bottomNavigation) lateinit var bottomNavigationView: BottomNavigationView
 
     @Inject @TabsParam lateinit var paramFromScope: String
+    @Inject lateinit var scope: Scope
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         titleLabel.text = paramFromScope
@@ -42,7 +44,7 @@ class TabsFlowFragment : BaseFragment(R.layout.flow_tabs), BottomNavigationView.
             R.id.simple -> setCurrentFragment(FRAGMENT_SIMPLE) { Screens.SimpleTab.fragment }
             R.id.scoped -> setCurrentFragment(FRAGMENT_SIMPLE_SCOPED) { Screens.SimpleScopedTab().fragment }
             R.id.list -> setCurrentFragment(FRAGMENT_LIST) { Flows.List.fragment }
-            R.id.nesting -> setCurrentFragment(FRAGMENT_NESTING) { Screens.Nesting.fragment }
+            R.id.nesting -> setCurrentFragment(FRAGMENT_NESTING) { Screens.Nesting(0, scope.name).fragment }
         }
     }
 
