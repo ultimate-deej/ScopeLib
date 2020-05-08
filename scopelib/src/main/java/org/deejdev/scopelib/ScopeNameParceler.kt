@@ -1,4 +1,4 @@
-package deej.scopelib.core.toothpick.scope
+package org.deejdev.scopelib
 
 import android.os.Parcel
 import kotlinx.android.parcel.Parceler

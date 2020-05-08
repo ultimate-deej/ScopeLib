@@ -1,11 +1,11 @@
 package deej.thoroughtestapp.presentation.navigation.cicerone
 
-import deej.scopelib.core.toothpick.scope.ScopeOptions
 import deej.thoroughtestapp.core.toothpick.scope.HomeScope
 import deej.thoroughtestapp.core.toothpick.scope.TabsScope
 import deej.thoroughtestapp.presentation.scopearguments.TabsScopeArguments
 import deej.thoroughtestapp.presentation.screens.ListFlowFragment
 import deej.thoroughtestapp.presentation.screens.TabsFlowFragment
+import org.deejdev.scopelib.ScopeOptions
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
 object Flows {

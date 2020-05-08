@@ -1,4 +1,4 @@
-package deej.scopelib.core.toothpick.scope
+package org.deejdev.scopelib
 
 internal fun formatScopeName(name: Any): String {
     return when {

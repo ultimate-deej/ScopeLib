@@ -1,10 +1,10 @@
 package deej.thoroughtestapp.presentation.navigation.coordinators
 
-import deej.scopelib.core.toothpick.scope.ScopeOptionsManager
 import deej.thoroughtestapp.core.toothpick.qualifiers.ActivityNavigation
 import deej.thoroughtestapp.core.toothpick.scope.RootScope
 import deej.thoroughtestapp.presentation.navigation.cicerone.Flows
 import deej.thoroughtestapp.presentation.navigation.cicerone.Screens
+import org.deejdev.scopelib.ScopeOptionsManager
 import ru.terrakok.cicerone.Router
 import toothpick.InjectConstructor
 

@@ -4,14 +4,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import deej.scopelib.core.toothpick.scope.ScopeOptionsManager
-import deej.scopelib.core.toothpick.scope.ScopeOptionsManagerCallbacks
-import deej.scopelib.core.toothpick.scope.ScopeOptionsManagerModule
 import deej.thoroughtestapp.R
 import deej.thoroughtestapp.core.toothpick.modules.NavigationModule
 import deej.thoroughtestapp.core.toothpick.qualifiers.ActivityNavigation
 import deej.thoroughtestapp.core.toothpick.scope.RootScope
 import deej.thoroughtestapp.presentation.navigation.coordinators.RootCoordinator
+import org.deejdev.scopelib.ScopeOptionsManager
+import org.deejdev.scopelib.ScopeOptionsManagerCallbacks
+import org.deejdev.scopelib.ScopeOptionsManagerModule
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
 import ru.terrakok.cicerone.commands.Command
