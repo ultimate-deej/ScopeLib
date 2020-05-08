@@ -56,6 +56,5 @@ class NestingFragment : BaseFragment(R.layout.fragment_nesting) {
     private fun updateButtons() {
         val hasChildren = childFragmentManager.backStackEntryCount > 0
         backButton.isEnabled = hasChildren
-        nestButton.isEnabled = !hasChildren
     }
 }

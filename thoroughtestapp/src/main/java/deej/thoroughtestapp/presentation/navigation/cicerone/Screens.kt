@@ -48,9 +48,11 @@ object Screens {
     }
 
     class Nesting(level: Int, parentScopeName: Any) : ScopeLibAppScreen() {
+        private val arguments = NestingScopeArguments(level)
+
         override val scopeOptions = ScopeOptions.withUniqueId(
-            "Nesting level $level",
-            NestingScopeArguments(level),
+            "Nesting level $level ${arguments.param}",
+            arguments,
             parentScopeName
         )
 
