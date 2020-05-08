@@ -38,10 +38,7 @@ internal val Fragment.scopeOptions: ScopeOptions?
     get() = arguments?.getParcelable(ARGUMENT_SCOPE_OPTIONS)
 
 internal val Fragment.isDropping: Boolean
-    get() = when (val parent = parentFragment) {
-        null -> !isStateSaved && isRemoving
-        else -> parent.isDropping // If any of the ancestors is being dropped, we are too
-    }
+    get() = !isStateSaved || (parentFragment?.isDropping == true) // If any of the ancestors is being dropped, we are too
 
 @Parcelize
 private class ScopeName(val value: @WriteWith<ScopeNameParceler> Any) : Parcelable
