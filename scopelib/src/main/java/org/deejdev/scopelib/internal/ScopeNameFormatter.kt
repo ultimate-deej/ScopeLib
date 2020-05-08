@@ -1,4 +1,4 @@
-package org.deejdev.scopelib
+package org.deejdev.scopelib.internal
 
 internal fun formatScopeName(name: Any): String {
     return when {

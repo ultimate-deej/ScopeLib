@@ -2,6 +2,7 @@ package org.deejdev.scopelib
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import org.deejdev.scopelib.internal.ScopeOptionsModule
 import toothpick.ktp.KTP
 import toothpick.ktp.extension.getInstance
 

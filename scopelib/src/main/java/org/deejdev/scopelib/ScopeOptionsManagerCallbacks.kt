@@ -3,6 +3,10 @@ package org.deejdev.scopelib
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import org.deejdev.scopelib.internal.formatScopeName
+import org.deejdev.scopelib.internal.isDropping
+import org.deejdev.scopelib.internal.scopeOptions
+import org.deejdev.scopelib.internal.usedScopeName
 import toothpick.ktp.KTP
 
 class ScopeOptionsManagerCallbacks(

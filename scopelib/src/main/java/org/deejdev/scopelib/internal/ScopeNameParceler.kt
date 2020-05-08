@@ -1,9 +1,9 @@
-package org.deejdev.scopelib
+package org.deejdev.scopelib.internal
 
 import android.os.Parcel
 import kotlinx.android.parcel.Parceler
 
-object ScopeNameParceler : Parceler<Any?> {
+internal object ScopeNameParceler : Parceler<Any?> {
     override fun create(parcel: Parcel): Any? {
         return when (val kind = parcel.readInt()) {
             0 -> return null
