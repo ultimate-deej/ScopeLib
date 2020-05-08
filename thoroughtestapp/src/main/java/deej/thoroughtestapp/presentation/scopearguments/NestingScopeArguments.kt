@@ -9,10 +9,16 @@ import toothpick.config.Module
 
 @Parcelize
 data class NestingScopeArguments(
-    val level: Int
+    val level: Int,
+    val param: String = randomString()
 ) : ScopeArguments() {
     override fun createModules(): Array<Module> = arrayOf(
-        NestingModule(level),
+        NestingModule(level, param),
         NavigationModule<NestingNavigation>(false)
     )
+}
+
+private fun randomString(): String {
+    val chars: List<Char> = ('A'..'Z') + ('a'..'z')
+    return String(CharArray(3) { chars.random() })
 }

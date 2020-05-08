@@ -11,6 +11,7 @@ import deej.thoroughtestapp.R
 import deej.thoroughtestapp.core.toothpick.BoxedInt
 import deej.thoroughtestapp.core.toothpick.qualifiers.NestingLevel
 import deej.thoroughtestapp.core.toothpick.qualifiers.NestingNavigation
+import deej.thoroughtestapp.core.toothpick.qualifiers.NestingParam
 import deej.thoroughtestapp.presentation.base.BaseFragment
 import deej.thoroughtestapp.presentation.navigation.cicerone.Screens
 import ru.terrakok.cicerone.Router
@@ -22,6 +23,7 @@ class NestingFragment : BaseFragment(R.layout.fragment_nesting) {
     @BindView(R.id.nest) lateinit var nestButton: Button
     @BindView(R.id.text) lateinit var textView: TextView
 
+    @Inject @NestingParam lateinit var param: String
     @Inject @NestingLevel lateinit var boxedLevel: BoxedInt
     @Inject lateinit var scope: Scope
     @Inject @NestingNavigation lateinit var router: Router
@@ -31,7 +33,7 @@ class NestingFragment : BaseFragment(R.layout.fragment_nesting) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        textView.text = "Level $level"
+        textView.text = "Level $level ($param)"
         childFragmentManager.addOnBackStackChangedListener {
             updateButtons()
         }
