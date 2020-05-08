@@ -43,6 +43,5 @@ internal val Fragment.isDropping: Boolean
 @Parcelize
 private class ScopeName(val value: @WriteWith<ScopeNameParceler> Any) : Parcelable
 
-// TODO: full package name?
-private const val ARGUMENT_SCOPE_OPTIONS = "deej.scopelib.scopeOptions"
-private const val ARGUMENT_USED_SCOPE_NAME = "deej.scopelib.usedScopeName"
+private const val ARGUMENT_SCOPE_OPTIONS = "org.deejdev.scopelib.ARGUMENT_SCOPE_OPTIONS"
+private const val ARGUMENT_USED_SCOPE_NAME = "org.deejdev.scopelib.ARGUMENT_USED_SCOPE_NAME"
