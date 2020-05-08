@@ -4,9 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import toothpick.ktp.KTP
 import toothpick.ktp.extension.getInstance
-import javax.inject.Singleton
 
-@Singleton
 @Parcelize
 class ScopeOptionsManager(
     private val items: MutableList<ScopeOptions> = mutableListOf()
