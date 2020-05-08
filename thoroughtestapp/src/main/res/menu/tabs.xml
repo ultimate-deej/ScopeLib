@@ -9,4 +9,7 @@
     <item
         android:id="@+id/list"
         android:title="Scoped List" />
+    <item
+        android:id="@+id/nesting"
+        android:title="Lots of nesting" />
 </menu>

@@ -42,6 +42,7 @@ class TabsFlowFragment : BaseFragment(R.layout.flow_tabs), BottomNavigationView.
             R.id.simple -> setCurrentFragment(FRAGMENT_SIMPLE) { Screens.SimpleTab.fragment }
             R.id.scoped -> setCurrentFragment(FRAGMENT_SIMPLE_SCOPED) { Screens.SimpleScopedTab().fragment }
             R.id.list -> setCurrentFragment(FRAGMENT_LIST) { Flows.List.fragment }
+            R.id.nesting -> setCurrentFragment(FRAGMENT_NESTING) { Screens.Nesting.fragment }
         }
     }
 
@@ -68,5 +69,6 @@ class TabsFlowFragment : BaseFragment(R.layout.flow_tabs), BottomNavigationView.
         private const val FRAGMENT_SIMPLE = "Simple"
         private const val FRAGMENT_SIMPLE_SCOPED = "Simple scoped"
         private const val FRAGMENT_LIST = "List"
+        private const val FRAGMENT_NESTING = "Nesting"
     }
 }

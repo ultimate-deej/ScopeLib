@@ -45,4 +45,8 @@ object Screens {
     object ItemDetails : SupportAppScreen() {
         override fun getFragment() = ItemDetailsFragment()
     }
+
+    object Nesting : SupportAppScreen() {
+        override fun getFragment() = NestingFragment()
+    }
 }
