@@ -2,7 +2,7 @@ package deej.scopelib.core.toothpick.scope
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import toothpick.Toothpick
+import toothpick.ktp.KTP
 import toothpick.ktp.extension.getInstance
 import javax.inject.Singleton
 
@@ -28,7 +28,7 @@ class ScopeOptionsManager(
     fun removeAndClose(scopeOptions: ScopeOptions) {
         items.remove(scopeOptions)
         if (isSameAsMaterialized(scopeOptions)) {
-            Toothpick.closeScope(scopeOptions.name)
+            KTP.closeScope(scopeOptions.name)
             cleanOrphansOf(scopeOptions.name)
         }
     }
@@ -36,18 +36,18 @@ class ScopeOptionsManager(
     fun materialize() {
         for (scopeOptions in items) {
             if (!isSameAsMaterialized(scopeOptions)) {
-                Toothpick.closeScope(scopeOptions.name)
-                check(Toothpick.isScopeOpen(scopeOptions.parentName)) { "Can't open $scopeOptions since its parent isn't open" }
-                Toothpick.openScopes(scopeOptions.parentName, scopeOptions.name)
+                KTP.closeScope(scopeOptions.name)
+                check(KTP.isScopeOpen(scopeOptions.parentName)) { "Can't open $scopeOptions since its parent isn't open" }
+                KTP.openScopes(scopeOptions.parentName, scopeOptions.name)
                     .installModules(*scopeOptions.scopeArguments.createModules(), ScopeOptionsModule(scopeOptions))
             }
         }
     }
 
     private fun isSameAsMaterialized(scopeOptions: ScopeOptions): Boolean {
-        if (!Toothpick.isScopeOpen(scopeOptions.name)) return false
+        if (!KTP.isScopeOpen(scopeOptions.name)) return false
 
-        val liveScopeOptions = Toothpick.openScope(scopeOptions.name).getInstance<ScopeOptions>()
+        val liveScopeOptions = KTP.openScope(scopeOptions.name).getInstance<ScopeOptions>()
         return scopeOptions == liveScopeOptions
     }
 

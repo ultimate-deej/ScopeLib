@@ -3,7 +3,7 @@ package deej.scopelib.core.toothpick.scope
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import toothpick.Toothpick
+import toothpick.ktp.KTP
 
 class ScopeOptionsManagerCallbacks(
     private val scopeOptionsManager: ScopeOptionsManager
@@ -15,8 +15,8 @@ class ScopeOptionsManagerCallbacks(
         // If the fragment specifies a scope name to use, inject
         f.usedScopeName?.let { usedScopeName ->
             scopeOptionsManager.materialize()
-            check(Toothpick.isScopeOpen(usedScopeName)) { "Required scope `${formatScopeName(usedScopeName)}` is not open" }
-            Toothpick.openScope(usedScopeName)
+            check(KTP.isScopeOpen(usedScopeName)) { "Required scope `${formatScopeName(usedScopeName)}` is not open" }
+            KTP.openScope(usedScopeName)
                 .inject(f)
         }
     }

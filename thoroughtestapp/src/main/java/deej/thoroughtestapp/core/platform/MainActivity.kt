@@ -16,7 +16,7 @@ import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
 import ru.terrakok.cicerone.commands.Command
 import toothpick.Scope
-import toothpick.Toothpick
+import toothpick.ktp.KTP
 import toothpick.smoothie.module.SmoothieApplicationModule
 import javax.inject.Inject
 
@@ -65,13 +65,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun initScope(): Scope {
-        return Toothpick.openScope(RootScope::class.java) {
+        return KTP.openScope(RootScope::class.java, Scope.ScopeConfig {
             it.installModules(
                 ScopeOptionsManagerModule(scopeOptionsManager),
                 SmoothieApplicationModule(application),
                 NavigationModule<ActivityNavigation>(isDefault = true)
             )
-        }
+        })
     }
 
     private fun initScopeOptionsManager(savedInstanceState: Bundle?) {
