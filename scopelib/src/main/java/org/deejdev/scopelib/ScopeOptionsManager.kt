@@ -19,16 +19,18 @@ class ScopeOptionsManager(
             val existing = items[indexOfExisting]
             if (existing.instanceId != scopeOptions.instanceId) {
                 items.removeAt(indexOfExisting)
+                cleanOrphansOf(scopeOptions.name)
                 items.add(scopeOptions)
             }
         }
     }
 
     fun removeAndClose(scopeOptions: ScopeOptions) {
-        items.remove(scopeOptions)
+        if (items.remove(scopeOptions)) {
+            cleanOrphansOf(scopeOptions.name)
+        }
         if (isSameAsMaterialized(scopeOptions)) {
             KTP.closeScope(scopeOptions.name)
-            cleanOrphansOf(scopeOptions.name)
         }
     }
 
