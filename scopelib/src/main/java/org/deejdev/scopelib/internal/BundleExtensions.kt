@@ -8,21 +8,21 @@ import org.deejdev.scopelib.ScopeOptions
 
 internal var Bundle.usedScopeName: Any?
     get() {
-        val scopeName = getParcelable(ARGUMENT_USED_SCOPE_NAME) as ScopeName?
+        val scopeName = getParcelable(KEY_USED_SCOPE_NAME) as ScopeName?
         return scopeName?.value
     }
     set(value) {
         value?.let(ScopeNameParceler::checkSupported)
 
-        putParcelable(ARGUMENT_USED_SCOPE_NAME, value?.let(::ScopeName))
+        putParcelable(KEY_USED_SCOPE_NAME, value?.let(::ScopeName))
     }
 
 internal var Bundle.scopeOptions: ScopeOptions?
-    get() = getParcelable(ARGUMENT_SCOPE_OPTIONS)
-    set(value) = putParcelable(ARGUMENT_SCOPE_OPTIONS, value)
+    get() = getParcelable(KEY_SCOPE_OPTIONS)
+    set(value) = putParcelable(KEY_SCOPE_OPTIONS, value)
 
 @Parcelize
 private class ScopeName(val value: @WriteWith<ScopeNameParceler> Any) : Parcelable
 
-private const val ARGUMENT_SCOPE_OPTIONS = "org.deejdev.scopelib.ARGUMENT_SCOPE_OPTIONS"
-private const val ARGUMENT_USED_SCOPE_NAME = "org.deejdev.scopelib.ARGUMENT_USED_SCOPE_NAME"
+private const val KEY_SCOPE_OPTIONS = "org.deejdev.scopelib.SCOPE_OPTIONS"
+private const val KEY_USED_SCOPE_NAME = "org.deejdev.scopelib.USED_SCOPE_NAME"
