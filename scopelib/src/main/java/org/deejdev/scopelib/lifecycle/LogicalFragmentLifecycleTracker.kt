@@ -12,6 +12,8 @@ import java.lang.ref.WeakReference
 
 private val lifecycleOwnerByUniqueId = SimpleArrayMap<String, LogicalFragmentLifecycleTracker>()
 
+internal fun getLogicalFragmentLifecycleTracker(uniqueId: String) = lifecycleOwnerByUniqueId[uniqueId]
+
 private fun Fragment.ensureEntry(): LogicalFragmentLifecycleTracker {
     val uniqueId = ensureUniqueInstanceId()
     if (!lifecycleOwnerByUniqueId.containsKey(uniqueId)) {
@@ -21,7 +23,7 @@ private fun Fragment.ensureEntry(): LogicalFragmentLifecycleTracker {
 }
 
 class LogicalFragmentLifecycleTracker(private val key: String) : LifecycleEventObserver, LifecycleOwner {
-    private var fragment: WeakReference<Fragment>? = null
+    internal var fragment: WeakReference<Fragment>? = null
     private val lifecycleRegistry = LifecycleRegistry(this)
 
     override fun getLifecycle(): Lifecycle = lifecycleRegistry
