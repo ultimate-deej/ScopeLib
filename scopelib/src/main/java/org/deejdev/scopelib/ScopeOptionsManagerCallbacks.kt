@@ -3,10 +3,7 @@ package org.deejdev.scopelib
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import org.deejdev.scopelib.internal.formatScopeName
-import org.deejdev.scopelib.internal.isDropping
-import org.deejdev.scopelib.internal.scopeOptions
-import org.deejdev.scopelib.internal.usedScopeName
+import org.deejdev.scopelib.internal.*
 import toothpick.ktp.KTP
 
 class ScopeOptionsManagerCallbacks(
@@ -14,6 +11,9 @@ class ScopeOptionsManagerCallbacks(
 ) : FragmentManager.FragmentLifecycleCallbacks() {
 
     override fun onFragmentPreCreated(fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?) {
+        check(f.scopeOptions == null || f.scopeOptions?.instanceId == f.uniqueInstanceId) {
+            "`ScopeOptions.instanceId` is not in sync with `Fragment.uniqueInstanceId`"
+        }
         // If the fragment declares a scope to open, make sure the record is stored in the manager
         f.scopeOptions?.let(scopeOptionsManager::overwrite)
         // If the fragment specifies a scope name to use, inject

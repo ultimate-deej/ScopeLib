@@ -19,7 +19,12 @@ internal var Bundle.usedScopeName: Any?
 
 internal var Bundle.scopeOptions: ScopeOptions?
     get() = getParcelable(KEY_SCOPE_OPTIONS)
-    set(value) = putParcelable(KEY_SCOPE_OPTIONS, value)
+    set(value) {
+        putParcelable(KEY_SCOPE_OPTIONS, value)
+        if (value != null) {
+            uniqueInstanceId = value.instanceId
+        }
+    }
 
 internal var Bundle.uniqueInstanceId: String?
     get() = getString(KEY_UNIQUE_ID)
