@@ -36,6 +36,7 @@ class ScopeOptionsManager(
 
     fun materialize() {
         for (scopeOptions in items) {
+            check(scopeOptions.isAttached) { "$scopeOptions must be attached to a Fragment before use" }
             if (!isSameAsMaterialized(scopeOptions)) {
                 KTP.closeScope(scopeOptions.name)
                 check(KTP.isScopeOpen(scopeOptions.parentName)) { "Can't open $scopeOptions since its parent isn't open" }
