@@ -8,12 +8,14 @@ import org.deejdev.scopelib.internal.formatScopeName
 import java.util.*
 
 @Parcelize
-data class ScopeOptions(
+data class ScopeOptions internal constructor(
     val name: @WriteWith<ScopeNameParceler> Any,
     val scopeArguments: ScopeArguments,
     val parentName: @WriteWith<ScopeNameParceler> Any,
-    val instanceId: String
+    internal val instanceId: String
 ) : Parcelable {
+    constructor(name: Any, scopeArguments: ScopeArguments, parentName: Any) : this(name, scopeArguments, parentName, UUID.randomUUID().toString())
+
     init {
         ScopeNameParceler.checkSupported(name)
         ScopeNameParceler.checkSupported(parentName)
@@ -37,10 +39,5 @@ data class ScopeOptions(
         var result = name.hashCode()
         result = 31 * result + instanceId.hashCode()
         return result
-    }
-
-    companion object {
-        fun withUniqueId(name: Any, scopeArguments: ScopeArguments, parentName: Any) =
-            ScopeOptions(name, scopeArguments, parentName, UUID.randomUUID().toString())
     }
 }
