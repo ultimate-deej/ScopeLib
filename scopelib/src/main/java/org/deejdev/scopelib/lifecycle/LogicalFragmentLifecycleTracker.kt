@@ -1,51 +1,53 @@
 package org.deejdev.scopelib.lifecycle
 
-import android.os.Binder
-import android.os.Bundle
-import androidx.core.app.BundleCompat
+import androidx.collection.SimpleArrayMap
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
+import org.deejdev.scopelib.internal.ensureUniqueInstanceId
 import org.deejdev.scopelib.internal.isDropping
 import java.lang.ref.WeakReference
 
-private const val KEY_LIFECYCLE_TRACKER = "org.deejdev.scopelib.lifecycle.Fragment.LIFECYCLE_TRACKER"
+private val lifecycleOwnerByUniqueId = SimpleArrayMap<String, LogicalFragmentLifecycleTracker>()
 
-val Fragment.logicalLifecycleOwner: LifecycleOwner
-    get() {
-        if (arguments == null) arguments = Bundle()
-
-        val arguments = requireArguments()
-
-        val existingWrapped = BundleCompat.getBinder(arguments, KEY_LIFECYCLE_TRACKER) as? LifecycleTrackerReference
-        val tracker = when (val existingTracker = existingWrapped?.value) {
-            null -> LogicalFragmentLifecycleTracker().also { newTracker ->
-                BundleCompat.putBinder(arguments, KEY_LIFECYCLE_TRACKER, LifecycleTrackerReference(newTracker))
-            }
-            else -> existingTracker
-        }
-        tracker.updateFragment(this)
-        lifecycle.addObserver(tracker)
-        return tracker
+private fun Fragment.ensureEntry(): LogicalFragmentLifecycleTracker {
+    val uniqueId = ensureUniqueInstanceId()
+    if (!lifecycleOwnerByUniqueId.containsKey(uniqueId)) {
+        lifecycleOwnerByUniqueId.put(uniqueId, LogicalFragmentLifecycleTracker(uniqueId))
     }
+    return lifecycleOwnerByUniqueId[uniqueId]!!
+}
 
-private class LogicalFragmentLifecycleTracker : LifecycleEventObserver, LifecycleOwner {
+class LogicalFragmentLifecycleTracker(private val key: String) : LifecycleEventObserver, LifecycleOwner {
     private var fragment: WeakReference<Fragment>? = null
     private val lifecycleRegistry = LifecycleRegistry(this)
 
     override fun getLifecycle(): Lifecycle = lifecycleRegistry
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-        if (event != Lifecycle.Event.ON_DESTROY || fragment?.get()?.isDropping != false) {
+        if (event == Lifecycle.Event.ON_DESTROY) {
+            if (fragment?.get()?.isDropping != false) {
+                lifecycleRegistry.handleLifecycleEvent(event)
+                lifecycleOwnerByUniqueId.remove(key)
+            }
+        } else {
             lifecycleRegistry.handleLifecycleEvent(event)
         }
     }
 
-    fun updateFragment(newFragment: Fragment) {
+    internal fun updateFragment(newFragment: Fragment) {
         fragment = WeakReference(newFragment)
     }
-}
 
-private class LifecycleTrackerReference(val value: LogicalFragmentLifecycleTracker) : Binder()
+    companion object {
+        @JvmStatic
+        fun register(fragment: Fragment): Lifecycle {
+            val lifecycleTracker = fragment.ensureEntry()
+            lifecycleTracker.updateFragment(fragment)
+            fragment.lifecycle.addObserver(lifecycleTracker)
+            return lifecycleTracker.lifecycle
+        }
+    }
+}
