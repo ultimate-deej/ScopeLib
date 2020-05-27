@@ -22,5 +22,14 @@ internal var Fragment.scopeOptions: ScopeOptions?
         requireArguments().scopeOptions = value
     }
 
+internal var Fragment.uniqueInstanceId: String?
+    get() = arguments?.uniqueInstanceId
+    set(value) {
+        if (arguments == null) {
+            arguments = Bundle()
+        }
+        requireArguments().uniqueInstanceId = value
+    }
+
 internal val Fragment.isDropping: Boolean
     get() = !isStateSaved || (parentFragment?.isDropping == true) // If any of the ancestors is being dropped, we are too
