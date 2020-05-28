@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
+import java.lang.ref.WeakReference
 import java.util.*
 
 private val lifecycleOwnerByUniqueId = SimpleArrayMap<String, LogicalActivityLifecycleOwner>()
@@ -20,6 +21,7 @@ private class LogicalActivityLifecycleOwner : LifecycleOwner {
 }
 
 class LogicalActivityLifecycleTracker private constructor(activity: ComponentActivity, savedInstanceState: Bundle?) : LifecycleEventObserver, Application.ActivityLifecycleCallbacks {
+    private val activity = WeakReference(activity)
     private val uniqueId: String
 
     init {
@@ -31,10 +33,14 @@ class LogicalActivityLifecycleTracker private constructor(activity: ComponentAct
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
+        if (activity != this.activity.get()) return
+
         outState.putString(KEY_UNIQUE_ID, uniqueId)
     }
 
     override fun onActivityDestroyed(activity: Activity) {
+        if (activity != this.activity.get()) return
+
         activity.application.unregisterActivityLifecycleCallbacks(this)
 
         if (activity.isFinishing) {
