@@ -22,5 +22,15 @@ internal var Fragment.scopeOptions: ScopeOptions?
         requireArguments().scopeOptions = value
     }
 
+internal val Fragment.uniqueInstanceId: String?
+    get() = arguments?.uniqueInstanceId
+
+internal fun Fragment.ensureUniqueInstanceId(): String {
+    if (arguments == null) {
+        arguments = Bundle()
+    }
+    return requireArguments().ensureUniqueInstanceId()
+}
+
 internal val Fragment.isDropping: Boolean
     get() = !isStateSaved || (parentFragment?.isDropping == true) // If any of the ancestors is being dropped, we are too

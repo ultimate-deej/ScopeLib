@@ -36,4 +36,5 @@ dependencies {
 
     def toothpick_version = "3.1.0"
     api "com.github.stephanenicolas.toothpick:ktp:$toothpick_version"
+    kapt "com.github.stephanenicolas.toothpick:toothpick-compiler:$toothpick_version"
 }

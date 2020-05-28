@@ -20,7 +20,7 @@ object Screens {
     }
 
     class ScopedHome : ScopeLibAppScreen() {
-        override val scopeOptions = ScopeOptions.withUniqueId(HomeScope::class.java, ScopeArguments.Empty, RootScope::class.java)
+        override val scopeOptions = ScopeOptions(HomeScope::class.java, ScopeArguments.Empty, RootScope::class.java)
         override fun createFragment() = ScopedHomeFragment()
     }
 
@@ -30,7 +30,7 @@ object Screens {
     }
 
     class SimpleScopedTab : ScopeLibAppScreen() {
-        override val scopeOptions = ScopeOptions.withUniqueId(
+        override val scopeOptions = ScopeOptions(
             SimpleTabScope::class.java,
             SimpleTabScopeArguments(Random.nextInt(0..100)),
             HomeScope::class.java
@@ -50,7 +50,7 @@ object Screens {
     class Nesting(level: Int, parentScopeName: Any) : ScopeLibAppScreen() {
         private val arguments = NestingScopeArguments(level)
 
-        override val scopeOptions = ScopeOptions.withUniqueId(
+        override val scopeOptions = ScopeOptions(
             "Nesting level $level ${arguments.param}",
             arguments,
             parentScopeName
