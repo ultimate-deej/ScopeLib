@@ -21,9 +21,10 @@ internal var Bundle.usedScopeName: Any?
 internal var Bundle.scopeOptions: ScopeOptions?
     get() = getParcelable(KEY_SCOPE_OPTIONS)
     set(value) {
-        putParcelable(KEY_SCOPE_OPTIONS, value)
-        if (value != null) {
-            value.instanceId = ensureUniqueInstanceId()
+        val copy = value?.copy()
+        putParcelable(KEY_SCOPE_OPTIONS, copy)
+        if (copy != null) {
+            copy.instanceId = ensureUniqueInstanceId()
         }
     }
 
