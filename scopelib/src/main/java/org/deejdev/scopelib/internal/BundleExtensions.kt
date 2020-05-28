@@ -30,8 +30,12 @@ internal var Bundle.scopeOptions: ScopeOptions?
 
 internal var Bundle.uniqueInstanceId: String?
     get() = getString(KEY_UNIQUE_ID)
-    private set(value) {
+    set(value) {
         check(value != null) { "`uniqueInstanceId` cannot be set to null." }
+
+        uniqueInstanceId.let {
+            check(it == null || it == value) { "`uniqueInstanceId` can only be set once. Current value is \"$it\", attempted to set \"$value\"." }
+        }
 
         putString(KEY_UNIQUE_ID, value)
     }
