@@ -21,7 +21,7 @@ private class LogicalActivityLifecycleOwner : LifecycleOwner {
     fun handleLifecycleEvent(event: Lifecycle.Event) = lifecycleRegistry.handleLifecycleEvent(event)
 }
 
-class LogicalActivityLifecycleTracker private constructor(activity: ComponentActivity, savedInstanceState: Bundle?) : LifecycleEventObserver, Application.ActivityLifecycleCallbacks {
+internal class LogicalActivityLifecycleTracker private constructor(activity: ComponentActivity, savedInstanceState: Bundle?) : LifecycleEventObserver, Application.ActivityLifecycleCallbacks {
     private val activity = WeakReference(activity)
     private val uniqueId: String = savedInstanceState?.uniqueInstanceId ?: UUID.randomUUID().toString()
 

@@ -16,7 +16,7 @@ internal fun ensureLogicalFragmentLifecycleTracker(uniqueId: String): LogicalFra
     return lifecycleOwnerByUniqueId[uniqueId]!!
 }
 
-class LogicalFragmentLifecycleTracker(private val key: String) : LifecycleEventObserver, LifecycleOwner {
+internal class LogicalFragmentLifecycleTracker(private val key: String) : LifecycleEventObserver, LifecycleOwner {
     internal var fragment: WeakReference<Fragment>? = null
     private val lifecycleRegistry = object : LifecycleRegistry(this) {
         override fun addObserver(observer: LifecycleObserver) {
