@@ -5,19 +5,23 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.WriteWith
 import org.deejdev.scopelib.internal.ScopeNameParceler
 import org.deejdev.scopelib.internal.formatScopeName
-import java.util.*
 
 @Parcelize
-data class ScopeOptions(
+data class ScopeOptions internal constructor(
     val name: @WriteWith<ScopeNameParceler> Any,
     val scopeArguments: ScopeArguments,
     val parentName: @WriteWith<ScopeNameParceler> Any,
-    val instanceId: String
+    internal var instanceId: String
 ) : Parcelable {
+    constructor(name: Any, scopeArguments: ScopeArguments, parentName: Any) : this(name, scopeArguments, parentName, ID_UNINITIALIZED)
+
     init {
         ScopeNameParceler.checkSupported(name)
         ScopeNameParceler.checkSupported(parentName)
     }
+
+    val isAttached: Boolean
+        get() = instanceId != ID_UNINITIALIZED
 
     override fun toString() = "${formatScopeName(name)}($scopeArguments)[${instanceId.take(8)}]{parent=${formatScopeName(parentName)}}"
 
@@ -38,9 +42,6 @@ data class ScopeOptions(
         result = 31 * result + instanceId.hashCode()
         return result
     }
-
-    companion object {
-        fun withUniqueId(name: Any, scopeArguments: ScopeArguments, parentName: Any) =
-            ScopeOptions(name, scopeArguments, parentName, UUID.randomUUID().toString())
-    }
 }
+
+private const val ID_UNINITIALIZED = "UNINITIALIZED"

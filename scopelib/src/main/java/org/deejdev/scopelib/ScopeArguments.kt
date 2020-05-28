@@ -11,4 +11,13 @@ abstract class ScopeArguments : Parcelable {
     object Empty : ScopeArguments() {
         override fun toString() = "Empty"
     }
+
+    @Parcelize
+    object LogicalFragmentLifecycleOnly : ScopeArguments() {
+        override fun createModules(): Array<Module> = arrayOf(
+            LogicalFragmentLifecycleModule()
+        )
+
+        override fun toString() = "LogicalFragmentLifecycleOnly"
+    }
 }

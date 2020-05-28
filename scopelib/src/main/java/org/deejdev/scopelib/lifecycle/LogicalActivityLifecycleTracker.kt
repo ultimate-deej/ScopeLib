@@ -9,6 +9,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
+import org.deejdev.scopelib.internal.uniqueInstanceId
+import java.lang.ref.WeakReference
 import java.util.*
 
 private val lifecycleOwnerByUniqueId = SimpleArrayMap<String, LogicalActivityLifecycleOwner>()
@@ -19,22 +21,25 @@ private class LogicalActivityLifecycleOwner : LifecycleOwner {
     fun handleLifecycleEvent(event: Lifecycle.Event) = lifecycleRegistry.handleLifecycleEvent(event)
 }
 
-class LogicalActivityLifecycleTracker private constructor(activity: ComponentActivity, savedInstanceState: Bundle?) : LifecycleEventObserver, Application.ActivityLifecycleCallbacks {
-    private val uniqueId: String
+internal class LogicalActivityLifecycleTracker private constructor(activity: ComponentActivity, savedInstanceState: Bundle?) : LifecycleEventObserver, Application.ActivityLifecycleCallbacks {
+    private val activity = WeakReference(activity)
+    private val uniqueId: String = savedInstanceState?.uniqueInstanceId ?: UUID.randomUUID().toString()
 
     init {
-        uniqueId = savedInstanceState?.getString(KEY_UNIQUE_ID)
-            ?: UUID.randomUUID().toString()
         ensureEntryExists()
         activity.application.registerActivityLifecycleCallbacks(this)
         activity.lifecycle.addObserver(this)
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-        outState.putString(KEY_UNIQUE_ID, uniqueId)
+        if (activity != this.activity.get()) return
+
+        outState.uniqueInstanceId = uniqueId
     }
 
     override fun onActivityDestroyed(activity: Activity) {
+        if (activity != this.activity.get()) return
+
         activity.application.unregisterActivityLifecycleCallbacks(this)
 
         if (activity.isFinishing) {
@@ -62,8 +67,6 @@ class LogicalActivityLifecycleTracker private constructor(activity: ComponentAct
     override fun onActivityStopped(activity: Activity) = Unit
 
     companion object {
-        private const val KEY_UNIQUE_ID = "org.deejdev.scopelib.lifecycle.Activity.UNIQUE_ID"
-
         @JvmStatic
         fun register(activity: ComponentActivity, savedInstanceState: Bundle?): Lifecycle {
             val tracker = LogicalActivityLifecycleTracker(activity, savedInstanceState)
