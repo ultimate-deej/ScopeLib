@@ -43,6 +43,11 @@ data class ScopeOptions internal constructor(
         result = 31 * result + instanceId.hashCode()
         return result
     }
+
+    companion object {
+        inline operator fun <reified Name : Annotation, reified ParentName : Annotation> invoke(scopeArguments: ScopeArguments) =
+            ScopeOptions(Name::class.java, scopeArguments, ParentName::class.java)
+    }
 }
 
 private const val ID_UNINITIALIZED = "UNINITIALIZED"
