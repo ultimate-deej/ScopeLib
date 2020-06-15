@@ -14,3 +14,5 @@ fun Bundle.attachScopeOptions(scopeOptions: ScopeOptions, alsoUse: Boolean = tru
 fun Bundle.useScope(name: Any?) = apply {
     usedScopeName = name
 }
+
+inline fun <reified Name : Annotation> Bundle.useScope() = useScope(Name::class.java)

@@ -14,3 +14,5 @@ fun Fragment.attachScopeOptions(scopeOptions: ScopeOptions, alsoUse: Boolean = t
 fun Fragment.useScope(name: Any?) {
     usedScopeName = name
 }
+
+inline fun <reified Name : Annotation> Fragment.useScope() = useScope(Name::class.java)
