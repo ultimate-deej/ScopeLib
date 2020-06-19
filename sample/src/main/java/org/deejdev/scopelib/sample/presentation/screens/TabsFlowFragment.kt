@@ -41,7 +41,7 @@ class TabsFlowFragment : BaseFragment(R.layout.flow_tabs), BottomNavigationView.
 
     private fun setCurrentTabById(@IdRes itemId: Int) {
         when (itemId) {
-            R.id.simple -> setCurrentFragment(FRAGMENT_SIMPLE) { Screens.SimpleTab.fragment }
+            R.id.simple -> setCurrentFragment(FRAGMENT_SIMPLE) { Screens.SimpleTab().fragment }
             R.id.scoped -> setCurrentFragment(FRAGMENT_SIMPLE_SCOPED) { Screens.SimpleScopedTab().fragment }
             R.id.list -> setCurrentFragment(FRAGMENT_LIST) { Flows.List.fragment }
             R.id.nesting -> setCurrentFragment(FRAGMENT_NESTING) { Screens.Nesting(0, scope.name).fragment }

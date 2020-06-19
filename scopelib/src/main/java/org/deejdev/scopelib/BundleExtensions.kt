@@ -11,6 +11,9 @@ fun Bundle.attachScopeOptions(scopeOptions: ScopeOptions, alsoUse: Boolean = tru
     }
 }
 
+val Bundle.attachedScopeOptions: ScopeOptions?
+    get() = scopeOptions
+
 fun Bundle.useScope(name: Any?) = apply {
     usedScopeName = name
 }

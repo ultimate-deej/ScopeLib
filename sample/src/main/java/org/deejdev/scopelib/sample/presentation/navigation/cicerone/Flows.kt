@@ -10,7 +10,7 @@ import ru.terrakok.cicerone.android.support.SupportAppScreen
 
 object Flows {
     class Tabs : ScopeLibAppScreen() {
-        override val scopeOptions = ScopeOptions<TabsScope, HomeScope>(TabsScopeArguments("Injected Tabs Param"))
+        override fun createScopeOptions() = ScopeOptions<TabsScope, HomeScope>(TabsScopeArguments("Injected Tabs Param"))
         override fun createFragment() = TabsFlowFragment()
     }
 

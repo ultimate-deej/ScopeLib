@@ -14,24 +14,24 @@ class RootCoordinator(
     private val scopeOptionsManager: ScopeOptionsManager,
     @ActivityNavigation private val router: Router
 ) {
-    fun home() = router.newRootScreen(Screens.Home)
+    fun home() = router.newRootScreen(Screens.Home())
 
     fun home2() = router.navigateTo(Screens.ScopedHome())
 
     fun tabs() = router.navigateTo(Flows.Tabs())
 
     fun tabsViaNewChain() {
-        val screens = arrayOf(Screens.Home, Screens.ScopedHome(), Flows.Tabs())
+        val screens = arrayOf(Screens.Home(), Screens.ScopedHome(), Flows.Tabs())
         for (screen in screens) {
-            screen.scopeOptions?.let(scopeOptionsManager::overwrite)
+            screen.attachedScopeOptions?.let(scopeOptionsManager::overwrite)
         }
         router.newRootChain(*screens)
     }
 
     fun replacementChain() {
-        val screens = arrayOf(Screens.Home, Screens.ScopedHome(), Screens.SimpleScopedTab())
+        val screens = arrayOf(Screens.Home(), Screens.ScopedHome(), Screens.SimpleScopedTab())
         for (screen in screens) {
-            screen.scopeOptions?.let(scopeOptionsManager::overwrite)
+            screen.attachedScopeOptions?.let(scopeOptionsManager::overwrite)
         }
 
         router.newRootChain(*screens)

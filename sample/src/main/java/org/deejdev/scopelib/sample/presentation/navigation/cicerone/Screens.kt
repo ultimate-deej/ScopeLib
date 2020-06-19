@@ -14,23 +14,23 @@ import kotlin.random.Random
 import kotlin.random.nextInt
 
 object Screens {
-    object Home : ScopeLibAppScreen() {
+    class Home : ScopeLibAppScreen() {
         override val usedScopeName get() = RootScope::class.java
         override fun createFragment() = HomeFragment()
     }
 
     class ScopedHome : ScopeLibAppScreen() {
-        override val scopeOptions = ScopeOptions<HomeScope, RootScope>(ScopeArguments.Empty)
+        override fun createScopeOptions() = ScopeOptions<HomeScope, RootScope>(ScopeArguments.Empty)
         override fun createFragment() = ScopedHomeFragment()
     }
 
-    object SimpleTab : ScopeLibAppScreen() {
+    class SimpleTab : ScopeLibAppScreen() {
         override val usedScopeName get() = TabsScope::class.java
         override fun createFragment() = SimpleTabFragment()
     }
 
     class SimpleScopedTab : ScopeLibAppScreen() {
-        override val scopeOptions = ScopeOptions<SimpleTabScope, HomeScope>(
+        override fun createScopeOptions() = ScopeOptions<SimpleTabScope, HomeScope>(
             SimpleTabScopeArguments(Random.nextInt(0..100))
         )
 
@@ -45,10 +45,10 @@ object Screens {
         override fun getFragment() = ItemDetailsFragment()
     }
 
-    class Nesting(level: Int, parentScopeName: Any) : ScopeLibAppScreen() {
+    class Nesting(private val level: Int, private val parentScopeName: Any) : ScopeLibAppScreen() {
         private val arguments = NestingScopeArguments(level)
 
-        override val scopeOptions = ScopeOptions(
+        override fun createScopeOptions() = ScopeOptions(
             "Nesting level $level ${arguments.param}",
             arguments,
             parentScopeName
