@@ -14,7 +14,7 @@ import kotlin.random.Random
 import kotlin.random.nextInt
 
 object Screens {
-    object Home : ScopeLibAppScreen() {
+    class Home : ScopeLibAppScreen() {
         override val usedScopeName get() = RootScope::class.java
         override fun createFragment() = HomeFragment()
     }
@@ -24,7 +24,7 @@ object Screens {
         override fun createFragment() = ScopedHomeFragment()
     }
 
-    object SimpleTab : ScopeLibAppScreen() {
+    class SimpleTab : ScopeLibAppScreen() {
         override val usedScopeName get() = TabsScope::class.java
         override fun createFragment() = SimpleTabFragment()
     }
