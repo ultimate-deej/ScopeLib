@@ -23,7 +23,7 @@ class RootCoordinator(
     fun tabsViaNewChain() {
         val screens = arrayOf(Screens.Home(), Screens.ScopedHome(), Flows.Tabs())
         for (screen in screens) {
-            screen.scopeOptions?.let(scopeOptionsManager::overwrite)
+            screen.attachedScopeOptions?.let(scopeOptionsManager::overwrite)
         }
         router.newRootChain(*screens)
     }
@@ -31,7 +31,7 @@ class RootCoordinator(
     fun replacementChain() {
         val screens = arrayOf(Screens.Home(), Screens.ScopedHome(), Screens.SimpleScopedTab())
         for (screen in screens) {
-            screen.scopeOptions?.let(scopeOptionsManager::overwrite)
+            screen.attachedScopeOptions?.let(scopeOptionsManager::overwrite)
         }
 
         router.newRootChain(*screens)
