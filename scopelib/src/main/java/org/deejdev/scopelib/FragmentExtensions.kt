@@ -11,6 +11,9 @@ fun Fragment.attachScopeOptions(scopeOptions: ScopeOptions, alsoUse: Boolean = t
     }
 }
 
+val Fragment.attachedScopeOptions: ScopeOptions?
+    get() = scopeOptions
+
 fun Fragment.useScope(name: Any?) {
     usedScopeName = name
 }
