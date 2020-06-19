@@ -8,11 +8,11 @@ import ru.terrakok.cicerone.android.support.SupportAppScreen
 
 abstract class ScopeLibAppScreen : SupportAppScreen() {
     open val scopeOptions: ScopeOptions? get() = null
-    protected open val usedScopeName: Any? get() = scopeOptions?.name
+    protected open val usedScopeName: Any? get() = null
 
     final override fun getFragment() = createFragment().apply {
         scopeOptions?.let { attachScopeOptions(it) }
-        useScope(usedScopeName)
+        usedScopeName?.let { useScope(it) }
     }
 
     protected abstract fun createFragment(): Fragment
