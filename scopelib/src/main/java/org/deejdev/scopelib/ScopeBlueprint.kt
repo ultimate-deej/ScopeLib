@@ -5,16 +5,15 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.WriteWith
 import org.deejdev.scopelib.internal.ScopeNameParceler
 import org.deejdev.scopelib.internal.formatScopeName
-import kotlin.reflect.KClass
 
 @Parcelize
-data class ScopeOptions internal constructor(
+data class ScopeBlueprint internal constructor(
     val name: @WriteWith<ScopeNameParceler> Any,
     val scopeArguments: ScopeArguments,
     val parentName: @WriteWith<ScopeNameParceler> Any,
     internal var instanceId: String
 ) : Parcelable {
-    constructor(name: Any, scopeArguments: ScopeArguments, parentName: Any) : this(javaifyClass(name), scopeArguments, javaifyClass(parentName), ID_UNINITIALIZED)
+    constructor(name: Any, scopeArguments: ScopeArguments, parentName: Any) : this(name, scopeArguments, parentName, ID_UNINITIALIZED)
 
     init {
         ScopeNameParceler.checkSupported(name)
@@ -30,7 +29,7 @@ data class ScopeOptions internal constructor(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as ScopeOptions
+        other as ScopeBlueprint
 
         if (name != other.name) return false
         if (instanceId != other.instanceId) return false
@@ -46,13 +45,8 @@ data class ScopeOptions internal constructor(
 
     companion object {
         inline operator fun <reified Name : Annotation, reified ParentName : Annotation> invoke(scopeArguments: ScopeArguments) =
-            ScopeOptions(Name::class.java, scopeArguments, ParentName::class.java)
+            ScopeBlueprint(Name::class.java, scopeArguments, ParentName::class.java)
     }
 }
 
 private const val ID_UNINITIALIZED = "UNINITIALIZED"
-
-private fun javaifyClass(name: Any): Any = when (name) {
-    is KClass<*> -> name.java
-    else -> name
-}

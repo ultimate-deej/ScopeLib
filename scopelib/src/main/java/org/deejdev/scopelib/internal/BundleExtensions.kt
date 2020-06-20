@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.WriteWith
-import org.deejdev.scopelib.ScopeOptions
+import org.deejdev.scopelib.ScopeBlueprint
 import java.util.*
 
 internal var Bundle.usedScopeName: Any?
@@ -18,15 +18,9 @@ internal var Bundle.usedScopeName: Any?
         putParcelable(KEY_USED_SCOPE_NAME, value?.let(::ScopeName))
     }
 
-internal var Bundle.scopeOptions: ScopeOptions?
-    get() = getParcelable(KEY_SCOPE_OPTIONS)
-    set(value) {
-        val copy = value?.copy()
-        putParcelable(KEY_SCOPE_OPTIONS, copy)
-        if (copy != null) {
-            copy.instanceId = ensureUniqueInstanceId()
-        }
-    }
+internal var Bundle.scopeBlueprint: ScopeBlueprint?
+    get() = getParcelable(KEY_SCOPE_BLUEPRINT)
+    set(value) = putParcelable(KEY_SCOPE_BLUEPRINT, value)
 
 internal var Bundle.uniqueInstanceId: String?
     get() = getString(KEY_UNIQUE_ID)
@@ -50,6 +44,6 @@ internal fun Bundle.ensureUniqueInstanceId(): String {
 @Parcelize
 private class ScopeName(val value: @WriteWith<ScopeNameParceler> Any) : Parcelable
 
-private const val KEY_SCOPE_OPTIONS = "org.deejdev.scopelib.SCOPE_OPTIONS"
+private const val KEY_SCOPE_BLUEPRINT = "org.deejdev.scopelib.SCOPE_BLUEPRINT"
 private const val KEY_USED_SCOPE_NAME = "org.deejdev.scopelib.USED_SCOPE_NAME"
 private const val KEY_UNIQUE_ID = "org.deejdev.scopelib.UNIQUE_ID"

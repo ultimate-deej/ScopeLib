@@ -4,12 +4,10 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'maven-publish'
 
-version '0.2.1'
+version '0.3'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.3"
-
 
     defaultConfig {
         minSdkVersion 22
@@ -28,6 +26,9 @@ android {
         }
     }
 
+    buildFeatures {
+        buildConfig = false
+    }
 }
 
 dependencies {
