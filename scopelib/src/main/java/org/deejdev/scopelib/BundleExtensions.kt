@@ -2,21 +2,21 @@ package org.deejdev.scopelib
 
 import android.os.Bundle
 import org.deejdev.scopelib.internal.ensureUniqueInstanceId
-import org.deejdev.scopelib.internal.scopeOptions
+import org.deejdev.scopelib.internal.scopeBlueprint
 import org.deejdev.scopelib.internal.usedScopeName
 
-fun Bundle.attachScopeOptions(scopeOptions: ScopeOptions, alsoUse: Boolean = true) = apply {
-    val copy = scopeOptions.copy()
+fun Bundle.attachScopeBlueprint(scopeBlueprint: ScopeBlueprint, alsoUse: Boolean = true) = apply {
+    val copy = scopeBlueprint.copy()
     copy.instanceId = ensureUniqueInstanceId()
-    this.scopeOptions = copy
+    this.scopeBlueprint = copy
 
     if (alsoUse) {
-        usedScopeName = scopeOptions.name
+        usedScopeName = scopeBlueprint.name
     }
 }
 
-val Bundle.attachedScopeOptions: ScopeOptions?
-    get() = scopeOptions
+val Bundle.attachedScopeBlueprint: ScopeBlueprint?
+    get() = scopeBlueprint
 
 fun Bundle.useScope(name: Any?) = apply {
     usedScopeName = name

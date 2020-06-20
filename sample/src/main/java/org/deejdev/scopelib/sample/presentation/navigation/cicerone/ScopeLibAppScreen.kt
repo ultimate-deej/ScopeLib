@@ -1,20 +1,20 @@
 package org.deejdev.scopelib.sample.presentation.navigation.cicerone
 
 import androidx.fragment.app.Fragment
-import org.deejdev.scopelib.ScopeOptions
-import org.deejdev.scopelib.attachScopeOptions
-import org.deejdev.scopelib.attachedScopeOptions
+import org.deejdev.scopelib.ScopeBlueprint
+import org.deejdev.scopelib.attachScopeBlueprint
+import org.deejdev.scopelib.attachedScopeBlueprint
 import org.deejdev.scopelib.useScope
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
 abstract class ScopeLibAppScreen : SupportAppScreen() {
-    protected open fun createScopeOptions(): ScopeOptions? = null
+    protected open fun createScopeBlueprint(): ScopeBlueprint? = null
     protected open val usedScopeName: Any? get() = null
 
     private var called = false
 
-    val attachedScopeOptions: ScopeOptions?
-        get() = lazyFragment.attachedScopeOptions
+    val attachedScopeBlueprint: ScopeBlueprint?
+        get() = lazyFragment.attachedScopeBlueprint
 
     final override fun getFragment(): Fragment {
         check(!called) { "ScopeLibAppScreen instances are one-off (${javaClass.name})" }
@@ -24,7 +24,7 @@ abstract class ScopeLibAppScreen : SupportAppScreen() {
 
     private val lazyFragment by lazy(LazyThreadSafetyMode.NONE) {
         createFragment().apply {
-            createScopeOptions()?.let { attachScopeOptions(it) }
+            createScopeBlueprint()?.let { attachScopeBlueprint(it) }
             usedScopeName?.let { useScope(it) }
         }
     }

@@ -1,7 +1,7 @@
 package org.deejdev.scopelib.sample.presentation.navigation.cicerone
 
 import org.deejdev.scopelib.ScopeArguments
-import org.deejdev.scopelib.ScopeOptions
+import org.deejdev.scopelib.ScopeBlueprint
 import org.deejdev.scopelib.sample.core.toothpick.scope.HomeScope
 import org.deejdev.scopelib.sample.core.toothpick.scope.RootScope
 import org.deejdev.scopelib.sample.core.toothpick.scope.SimpleTabScope
@@ -20,7 +20,7 @@ object Screens {
     }
 
     class ScopedHome : ScopeLibAppScreen() {
-        override fun createScopeOptions() = ScopeOptions<HomeScope, RootScope>(ScopeArguments.Empty)
+        override fun createScopeBlueprint() = ScopeBlueprint<HomeScope, RootScope>(ScopeArguments.Empty)
         override fun createFragment() = ScopedHomeFragment()
     }
 
@@ -30,7 +30,7 @@ object Screens {
     }
 
     class SimpleScopedTab : ScopeLibAppScreen() {
-        override fun createScopeOptions() = ScopeOptions<SimpleTabScope, HomeScope>(
+        override fun createScopeBlueprint() = ScopeBlueprint<SimpleTabScope, HomeScope>(
             SimpleTabScopeArguments(Random.nextInt(0..100))
         )
 
@@ -48,7 +48,7 @@ object Screens {
     class Nesting(private val level: Int, private val parentScopeName: Any) : ScopeLibAppScreen() {
         private val arguments = NestingScopeArguments(level)
 
-        override fun createScopeOptions() = ScopeOptions(
+        override fun createScopeBlueprint() = ScopeBlueprint(
             "Nesting level $level ${arguments.param}",
             arguments,
             parentScopeName

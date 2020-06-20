@@ -7,7 +7,7 @@ import org.deejdev.scopelib.internal.ScopeNameParceler
 import org.deejdev.scopelib.internal.formatScopeName
 
 @Parcelize
-data class ScopeOptions internal constructor(
+data class ScopeBlueprint internal constructor(
     val name: @WriteWith<ScopeNameParceler> Any,
     val scopeArguments: ScopeArguments,
     val parentName: @WriteWith<ScopeNameParceler> Any,
@@ -29,7 +29,7 @@ data class ScopeOptions internal constructor(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as ScopeOptions
+        other as ScopeBlueprint
 
         if (name != other.name) return false
         if (instanceId != other.instanceId) return false
@@ -45,7 +45,7 @@ data class ScopeOptions internal constructor(
 
     companion object {
         inline operator fun <reified Name : Annotation, reified ParentName : Annotation> invoke(scopeArguments: ScopeArguments) =
-            ScopeOptions(Name::class.java, scopeArguments, ParentName::class.java)
+            ScopeBlueprint(Name::class.java, scopeArguments, ParentName::class.java)
     }
 }
 

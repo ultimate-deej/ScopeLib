@@ -4,9 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import org.deejdev.scopelib.ScopeOptionsManager
-import org.deejdev.scopelib.ScopeOptionsManagerCallbacks
-import org.deejdev.scopelib.ScopeOptionsManagerModule
+import org.deejdev.scopelib.ScopeBlueprintManager
+import org.deejdev.scopelib.ScopeBlueprintManagerCallbacks
+import org.deejdev.scopelib.ScopeBlueprintManagerModule
 import org.deejdev.scopelib.sample.R
 import org.deejdev.scopelib.sample.core.toothpick.modules.NavigationModule
 import org.deejdev.scopelib.sample.core.toothpick.qualifiers.ActivityNavigation
@@ -21,7 +21,7 @@ import toothpick.smoothie.module.SmoothieApplicationModule
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
-    private lateinit var scopeOptionsManager: ScopeOptionsManager
+    private lateinit var scopeBlueprintManager: ScopeBlueprintManager
 
     @Inject lateinit var coordinator: RootCoordinator
 
@@ -41,9 +41,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        initScopeOptionsManager(savedInstanceState)
+        initScopeBlueprintManager(savedInstanceState)
         initScope().inject(this)
-        supportFragmentManager.registerFragmentLifecycleCallbacks(ScopeOptionsManagerCallbacks(scopeOptionsManager), true)
+        supportFragmentManager.registerFragmentLifecycleCallbacks(ScopeBlueprintManagerCallbacks(scopeBlueprintManager), true)
 
         super.onCreate(savedInstanceState)
 
@@ -67,23 +67,23 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private fun initScope(): Scope {
         return KTP.openScope(RootScope::class.java, Scope.ScopeConfig {
             it.installModules(
-                ScopeOptionsManagerModule(scopeOptionsManager),
+                ScopeBlueprintManagerModule(scopeBlueprintManager),
                 SmoothieApplicationModule(application),
                 NavigationModule<ActivityNavigation>(isDefault = true)
             )
         })
     }
 
-    private fun initScopeOptionsManager(savedInstanceState: Bundle?) {
-        scopeOptionsManager = if (savedInstanceState == null)
-            ScopeOptionsManager()
+    private fun initScopeBlueprintManager(savedInstanceState: Bundle?) {
+        scopeBlueprintManager = if (savedInstanceState == null)
+            ScopeBlueprintManager()
         else
-            savedInstanceState.getParcelable(ScopeOptionsManager::class.java.name)!!
+            savedInstanceState.getParcelable(ScopeBlueprintManager::class.java.name)!!
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putParcelable(ScopeOptionsManager::class.java.name, scopeOptionsManager)
+        outState.putParcelable(ScopeBlueprintManager::class.java.name, scopeBlueprintManager)
     }
 }

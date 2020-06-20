@@ -14,9 +14,9 @@ class LogicalFragmentLifecycleModule : Module() {
 }
 
 @InjectConstructor
-internal class LogicalFragmentLifecycleProvider(private val scopeOptions: ScopeOptions) : Provider<Lifecycle> {
+internal class LogicalFragmentLifecycleProvider(private val scopeBlueprint: ScopeBlueprint) : Provider<Lifecycle> {
     override fun get(): Lifecycle {
-        val tracker = ensureLogicalFragmentLifecycleTracker(scopeOptions.instanceId)
+        val tracker = ensureLogicalFragmentLifecycleTracker(scopeBlueprint.instanceId)
         return tracker.lifecycle
     }
 }
