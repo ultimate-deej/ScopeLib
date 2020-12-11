@@ -1,8 +1,8 @@
 package org.deejdev.scopelib
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.parcel.WriteWith
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.WriteWith
 import org.deejdev.scopelib.internal.ScopeNameParceler
 import org.deejdev.scopelib.internal.formatScopeName
 

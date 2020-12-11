@@ -1,6 +1,6 @@
 package org.deejdev.scopelib.sample.presentation.scopemodules
 
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import org.deejdev.scopelib.ScopeModulesFactory
 import org.deejdev.scopelib.sample.core.toothpick.modules.NavigationModule
 import org.deejdev.scopelib.sample.core.toothpick.modules.NestingModule

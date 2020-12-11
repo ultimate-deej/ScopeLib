@@ -1,7 +1,7 @@
 package org.deejdev.scopelib.internal
 
 import android.os.Parcel
-import kotlinx.android.parcel.Parceler
+import kotlinx.parcelize.Parceler
 
 internal object ScopeNameParceler : Parceler<Any?> {
     override fun create(parcel: Parcel): Any? {

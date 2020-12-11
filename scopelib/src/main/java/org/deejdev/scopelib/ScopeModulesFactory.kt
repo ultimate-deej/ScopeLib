@@ -1,7 +1,7 @@
 package org.deejdev.scopelib
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import toothpick.config.Module
 
 abstract class ScopeModulesFactory : Parcelable {
