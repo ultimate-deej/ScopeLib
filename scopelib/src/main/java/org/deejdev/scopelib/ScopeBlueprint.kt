@@ -13,7 +13,7 @@ data class ScopeBlueprint internal constructor(
     val parentName: @WriteWith<ScopeNameParceler> Any,
     internal var instanceId: String
 ) : Parcelable {
-    constructor(name: Any, scopeArguments: ScopeArguments, parentName: Any) : this(name, scopeArguments, parentName, ID_UNINITIALIZED)
+    constructor(name: Any, scopeArguments: ScopeArguments, parentName: Any) : this(name, scopeArguments, parentName, ID_UNATTACHED)
 
     init {
         ScopeNameParceler.checkSupported(name)
@@ -21,7 +21,7 @@ data class ScopeBlueprint internal constructor(
     }
 
     val isAttached: Boolean
-        get() = instanceId != ID_UNINITIALIZED
+        get() = instanceId != ID_UNATTACHED
 
     override fun toString() = "${formatScopeName(name)}($scopeArguments)[${instanceId.take(8)}]{parent=${formatScopeName(parentName)}}"
 
@@ -49,4 +49,4 @@ data class ScopeBlueprint internal constructor(
     }
 }
 
-private const val ID_UNINITIALIZED = "UNINITIALIZED"
+private const val ID_UNATTACHED = "UNATTACHED"
