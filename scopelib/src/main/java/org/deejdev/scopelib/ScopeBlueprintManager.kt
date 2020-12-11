@@ -1,7 +1,7 @@
 package org.deejdev.scopelib
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import org.deejdev.scopelib.internal.ScopeBlueprintModule
 import toothpick.ktp.KTP
 import toothpick.ktp.extension.getInstance
@@ -41,7 +41,9 @@ class ScopeBlueprintManager(
                 KTP.closeScope(scopeBlueprint.name)
                 check(KTP.isScopeOpen(scopeBlueprint.parentName)) { "Can't open $scopeBlueprint since its parent isn't open" }
                 KTP.openScopes(scopeBlueprint.parentName, scopeBlueprint.name)
-                    .installModules(*scopeBlueprint.scopeArguments.createModules(), ScopeBlueprintModule(scopeBlueprint))
+                    .also { scope ->
+                        scope.installModules(*scopeBlueprint.modulesFactory.createModules(scope), ScopeBlueprintModule(scopeBlueprint))
+                    }
             }
         }
     }

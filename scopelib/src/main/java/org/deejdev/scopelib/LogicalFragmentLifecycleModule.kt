@@ -4,12 +4,23 @@ import androidx.lifecycle.Lifecycle
 import org.deejdev.scopelib.lifecycle.ensureLogicalFragmentLifecycleTracker
 import toothpick.InjectConstructor
 import toothpick.config.Module
-import toothpick.ktp.binding.bind
 import javax.inject.Provider
+import kotlin.reflect.KClass
 
-class LogicalFragmentLifecycleModule : Module() {
+class LogicalFragmentLifecycleModule(name: Class<out Annotation>? = null) : Module() {
+    constructor(name: KClass<out Annotation>) : this(name.java)
+
     init {
-        bind<Lifecycle>().toProvider(LogicalFragmentLifecycleProvider::class)
+        if (name == null) {
+            bind(Lifecycle::class.java).toProvider(LogicalFragmentLifecycleProvider::class.java)
+        } else {
+            bind(Lifecycle::class.java).withName(name).toProvider(LogicalFragmentLifecycleProvider::class.java)
+        }
+    }
+
+    companion object {
+        inline operator fun <reified Name : Annotation> invoke() =
+            LogicalFragmentLifecycleModule(Name::class.java)
     }
 }
 

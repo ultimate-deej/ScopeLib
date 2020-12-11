@@ -5,6 +5,9 @@ import org.deejdev.scopelib.internal.ensureUniqueInstanceId
 import org.deejdev.scopelib.internal.scopeBlueprint
 import org.deejdev.scopelib.internal.usedScopeName
 
+inline fun <reified Name : Annotation, reified ParentName : Annotation> Bundle.attachScopeBlueprint(modulesFactory: ScopeModulesFactory, alsoUse: Boolean = true) =
+    attachScopeBlueprint(ScopeBlueprint<Name, ParentName>(modulesFactory))
+
 fun Bundle.attachScopeBlueprint(scopeBlueprint: ScopeBlueprint, alsoUse: Boolean = true) = apply {
     val copy = scopeBlueprint.copy()
     copy.instanceId = ensureUniqueInstanceId()

@@ -1,18 +1,19 @@
-package org.deejdev.scopelib.sample.presentation.scopearguments
+package org.deejdev.scopelib.sample.presentation.scopemodules
 
-import kotlinx.android.parcel.Parcelize
-import org.deejdev.scopelib.ScopeArguments
+import kotlinx.parcelize.Parcelize
+import org.deejdev.scopelib.ScopeModulesFactory
 import org.deejdev.scopelib.sample.core.toothpick.modules.NavigationModule
 import org.deejdev.scopelib.sample.core.toothpick.modules.NestingModule
 import org.deejdev.scopelib.sample.core.toothpick.qualifiers.NestingNavigation
+import toothpick.Scope
 import toothpick.config.Module
 
 @Parcelize
-data class NestingScopeArguments(
+data class NestingScopeModulesFactory(
     val level: Int,
     val param: String = randomString()
-) : ScopeArguments() {
-    override fun createModules(): Array<Module> = arrayOf(
+) : ScopeModulesFactory() {
+    override fun createModules(scope: Scope): Array<Module> = arrayOf(
         NestingModule(level, param),
         NavigationModule<NestingNavigation>(false)
     )
