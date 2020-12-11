@@ -5,10 +5,12 @@ import kotlinx.parcelize.Parcelize
 import toothpick.config.Module
 
 abstract class ScopeModulesFactory : Parcelable {
-    open fun createModules(): Array<Module> = emptyArray()
+    abstract fun createModules(): Array<Module>
 
     @Parcelize
     object Empty : ScopeModulesFactory() {
+        override fun createModules() = emptyArray<Module>()
+
         override fun toString() = "Empty"
     }
 
