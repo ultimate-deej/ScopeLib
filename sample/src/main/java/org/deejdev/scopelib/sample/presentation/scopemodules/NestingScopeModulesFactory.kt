@@ -5,6 +5,7 @@ import org.deejdev.scopelib.ScopeModulesFactory
 import org.deejdev.scopelib.sample.core.toothpick.modules.NavigationModule
 import org.deejdev.scopelib.sample.core.toothpick.modules.NestingModule
 import org.deejdev.scopelib.sample.core.toothpick.qualifiers.NestingNavigation
+import toothpick.Scope
 import toothpick.config.Module
 
 @Parcelize
@@ -12,7 +13,7 @@ data class NestingScopeModulesFactory(
     val level: Int,
     val param: String = randomString()
 ) : ScopeModulesFactory() {
-    override fun createModules(): Array<Module> = arrayOf(
+    override fun createModules(scope: Scope): Array<Module> = arrayOf(
         NestingModule(level, param),
         NavigationModule<NestingNavigation>(false)
     )
