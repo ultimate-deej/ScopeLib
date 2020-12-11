@@ -41,7 +41,7 @@ class ScopeBlueprintManager(
                 KTP.closeScope(scopeBlueprint.name)
                 check(KTP.isScopeOpen(scopeBlueprint.parentName)) { "Can't open $scopeBlueprint since its parent isn't open" }
                 KTP.openScopes(scopeBlueprint.parentName, scopeBlueprint.name)
-                    .installModules(*scopeBlueprint.scopeArguments.createModules(), ScopeBlueprintModule(scopeBlueprint))
+                    .installModules(*scopeBlueprint.modulesFactory.createModules(), ScopeBlueprintModule(scopeBlueprint))
             }
         }
     }

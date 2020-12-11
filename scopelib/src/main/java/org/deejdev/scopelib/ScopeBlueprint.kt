@@ -9,11 +9,11 @@ import org.deejdev.scopelib.internal.formatScopeName
 @Parcelize
 data class ScopeBlueprint internal constructor(
     val name: @WriteWith<ScopeNameParceler> Any,
-    val scopeArguments: ScopeArguments,
+    val modulesFactory: ScopeModulesFactory,
     val parentName: @WriteWith<ScopeNameParceler> Any,
     internal var instanceId: String
 ) : Parcelable {
-    constructor(name: Any, scopeArguments: ScopeArguments, parentName: Any) : this(name, scopeArguments, parentName, ID_UNATTACHED)
+    constructor(name: Any, modulesFactory: ScopeModulesFactory, parentName: Any) : this(name, modulesFactory, parentName, ID_UNATTACHED)
 
     init {
         ScopeNameParceler.checkSupported(name)
@@ -23,7 +23,7 @@ data class ScopeBlueprint internal constructor(
     val isAttached: Boolean
         get() = instanceId != ID_UNATTACHED
 
-    override fun toString() = "${formatScopeName(name)}($scopeArguments)[${instanceId.take(8)}]{parent=${formatScopeName(parentName)}}"
+    override fun toString() = "${formatScopeName(name)}($modulesFactory)[${instanceId.take(8)}]{parent=${formatScopeName(parentName)}}"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -44,8 +44,8 @@ data class ScopeBlueprint internal constructor(
     }
 
     companion object {
-        inline operator fun <reified Name : Annotation, reified ParentName : Annotation> invoke(scopeArguments: ScopeArguments) =
-            ScopeBlueprint(Name::class.java, scopeArguments, ParentName::class.java)
+        inline operator fun <reified Name : Annotation, reified ParentName : Annotation> invoke(modulesFactory: ScopeModulesFactory) =
+            ScopeBlueprint(Name::class.java, modulesFactory, ParentName::class.java)
     }
 }
 

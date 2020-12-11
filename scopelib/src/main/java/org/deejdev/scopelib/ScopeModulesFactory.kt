@@ -4,16 +4,16 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import toothpick.config.Module
 
-abstract class ScopeArguments : Parcelable {
+abstract class ScopeModulesFactory : Parcelable {
     open fun createModules(): Array<Module> = emptyArray()
 
     @Parcelize
-    object Empty : ScopeArguments() {
+    object Empty : ScopeModulesFactory() {
         override fun toString() = "Empty"
     }
 
     @Parcelize
-    object LogicalFragmentLifecycleOnly : ScopeArguments() {
+    object LogicalFragmentLifecycleOnly : ScopeModulesFactory() {
         override fun createModules(): Array<Module> = arrayOf(
             LogicalFragmentLifecycleModule()
         )
