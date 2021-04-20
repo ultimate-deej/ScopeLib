@@ -12,6 +12,9 @@ internal val Fragment.uniqueInstanceId: String?
 internal fun Fragment.ensureUniqueInstanceId(): String = ensureArguments().ensureUniqueInstanceId()
 
 internal val Fragment.isDropping: Boolean
+    get() = (activity?.isFinishing == true) || isFragmentChainDropping
+
+private val Fragment.isFragmentChainDropping: Boolean
     get() = !isStateSaved || (parentFragment?.isDropping == true) // If any of the ancestors is being dropped, we are too
 
 internal fun Fragment.ensureArguments(): Bundle {
