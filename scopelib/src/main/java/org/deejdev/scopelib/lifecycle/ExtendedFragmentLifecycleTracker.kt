@@ -7,16 +7,16 @@ import org.deejdev.scopelib.internal.ensureUniqueInstanceId
 import org.deejdev.scopelib.internal.isDropping
 import java.lang.ref.WeakReference
 
-private val lifecycleOwnerByUniqueId = SimpleArrayMap<String, LogicalFragmentLifecycleTracker>()
+private val lifecycleOwnerByUniqueId = SimpleArrayMap<String, ExtendedFragmentLifecycleTracker>()
 
-internal fun ensureLogicalFragmentLifecycleTracker(uniqueId: String): LogicalFragmentLifecycleTracker {
+internal fun ensureExtendedFragmentLifecycleTracker(uniqueId: String): ExtendedFragmentLifecycleTracker {
     if (!lifecycleOwnerByUniqueId.containsKey(uniqueId)) {
-        lifecycleOwnerByUniqueId.put(uniqueId, LogicalFragmentLifecycleTracker(uniqueId))
+        lifecycleOwnerByUniqueId.put(uniqueId, ExtendedFragmentLifecycleTracker(uniqueId))
     }
     return lifecycleOwnerByUniqueId[uniqueId]!!
 }
 
-internal class LogicalFragmentLifecycleTracker(private val key: String) : LifecycleEventObserver, LifecycleOwner {
+internal class ExtendedFragmentLifecycleTracker(private val key: String) : LifecycleEventObserver, LifecycleOwner {
     internal var fragment: WeakReference<Fragment>? = null
     private val lifecycleRegistry = object : LifecycleRegistry(this) {
         override fun addObserver(observer: LifecycleObserver) {
@@ -50,7 +50,7 @@ internal class LogicalFragmentLifecycleTracker(private val key: String) : Lifecy
     companion object {
         @JvmStatic
         fun register(fragment: Fragment): Lifecycle {
-            val lifecycleTracker = ensureLogicalFragmentLifecycleTracker(fragment.ensureUniqueInstanceId())
+            val lifecycleTracker = ensureExtendedFragmentLifecycleTracker(fragment.ensureUniqueInstanceId())
             lifecycleTracker.updateFragment(fragment)
             fragment.lifecycle.addObserver(lifecycleTracker)
             return lifecycleTracker.lifecycle

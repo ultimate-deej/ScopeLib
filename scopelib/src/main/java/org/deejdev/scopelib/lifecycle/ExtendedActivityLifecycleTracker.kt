@@ -13,15 +13,15 @@ import org.deejdev.scopelib.internal.uniqueInstanceId
 import java.lang.ref.WeakReference
 import java.util.*
 
-private val lifecycleOwnerByUniqueId = SimpleArrayMap<String, LogicalActivityLifecycleOwner>()
+private val lifecycleOwnerByUniqueId = SimpleArrayMap<String, ExtendedActivityLifecycleOwner>()
 
-private class LogicalActivityLifecycleOwner : LifecycleOwner {
+private class ExtendedActivityLifecycleOwner : LifecycleOwner {
     private val lifecycleRegistry = LifecycleRegistry(this)
     override fun getLifecycle(): Lifecycle = lifecycleRegistry
     fun handleLifecycleEvent(event: Lifecycle.Event) = lifecycleRegistry.handleLifecycleEvent(event)
 }
 
-internal class LogicalActivityLifecycleTracker private constructor(activity: ComponentActivity, savedInstanceState: Bundle?) : LifecycleEventObserver, Application.ActivityLifecycleCallbacks {
+internal class ExtendedActivityLifecycleTracker private constructor(activity: ComponentActivity, savedInstanceState: Bundle?) : LifecycleEventObserver, Application.ActivityLifecycleCallbacks {
     private val activity = WeakReference(activity)
     private val uniqueId: String = savedInstanceState?.uniqueInstanceId ?: UUID.randomUUID().toString()
 
@@ -56,7 +56,7 @@ internal class LogicalActivityLifecycleTracker private constructor(activity: Com
 
     private fun ensureEntryExists() {
         if (!lifecycleOwnerByUniqueId.containsKey(uniqueId)) {
-            lifecycleOwnerByUniqueId.put(uniqueId, LogicalActivityLifecycleOwner())
+            lifecycleOwnerByUniqueId.put(uniqueId, ExtendedActivityLifecycleOwner())
         }
     }
 
@@ -69,7 +69,7 @@ internal class LogicalActivityLifecycleTracker private constructor(activity: Com
     companion object {
         @JvmStatic
         fun register(activity: ComponentActivity, savedInstanceState: Bundle?): Lifecycle {
-            val tracker = LogicalActivityLifecycleTracker(activity, savedInstanceState)
+            val tracker = ExtendedActivityLifecycleTracker(activity, savedInstanceState)
             activity.lifecycle.addObserver(tracker)
             return lifecycleOwnerByUniqueId[tracker.uniqueId]!!.lifecycle
         }

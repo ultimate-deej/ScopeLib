@@ -16,11 +16,11 @@ abstract class ScopeModulesFactory : Parcelable {
     }
 
     @Parcelize
-    object LogicalFragmentLifecycleOnly : ScopeModulesFactory() {
+    object ExtendedFragmentLifecycleOnly : ScopeModulesFactory() {
         override fun createModules(scope: Scope): Array<Module> = arrayOf(
-            LogicalFragmentLifecycleModule()
+            ExtendedFragmentLifecycleModule()
         )
 
-        override fun toString() = "LogicalFragmentLifecycleOnly"
+        override fun toString() = "ExtendedFragmentLifecycleOnly"
     }
 }
